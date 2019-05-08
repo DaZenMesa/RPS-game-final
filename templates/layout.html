@@ -20,11 +20,33 @@
 
   </head>
   <body>
-    {% include 'navbar.html' %}
-    <nav class="navbar navbar-light bg-light">
-      <a class="navbar-brand" href="/">Forum 1</a>
-      <a class="navbar-brand" href="/Forum2">Forum 2</a>
+  
+	{% include 'navbar.html'%}
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+  
+       <a class="navbar-brand" href="#">Navbar</a>
+
+  
+       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+         <span class="navbar-toggler-icon"></span>
+       </button>
+
+  
+       <div class="collapse navbar-collapse" id="collapsibleNavbar">
+         <ul class="navbar-nav">
+           <li {% if active_page == "home" %} class = "nav-item active" {% endif %}>
+             <a class="nav-link" href="/">Home</a>
+           </li>
+           <li {% if active_page == "page1" %} class = "nav-item active" {% endif %}>
+             <a class="nav-link" href="/p1">Page1</a>
+           </li>
+		   <li {% if active_page == "page2" %} class = "nav-item active" {% endif %}>
+              <a class="nav-link" href="/p2">Page2</a>
+           </li>
+         </ul>
+       </div> 
     </nav>
+
 
 
     <div id="content">

@@ -1,24 +1,10 @@
 {% extends "layout.html" %}
 
-{% block title %}Forum{% endblock %}
+{% block title %}info{% endblock %}
 
 {% block content %}
-  <h1>Forum 1</h1>
-  <p>{{message}}</p>
-
-  {% if 'user_data' in session %}
-    <form action='/posted1' method="post">
-      <textarea name="message" style="width:80%; height:100px;"></textarea>
-      <br>
-      <input type="submit" value="Post" name='Forum1'>
-    </form>
-    <div class="wid">
-        {% for item in past_posts1 %}
-          <div><p>{{ item['user'] }}</p><p>{{ item['msg'] }}</p></div>
-        {% endfor %}
-        <button name="delete" type="button" class="btn btn-danger">Delete</button>
-      </div>
-    {% endif %}
-
+  <h1>Game info:</h1>
+  <p>Rock Paper Scisors</p>
+ 
 
 {% endblock %}

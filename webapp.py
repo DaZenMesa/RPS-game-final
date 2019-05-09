@@ -4,6 +4,9 @@ from flask_oauthlib.client import OAuth
 from flask import render_template
 from time import localtime, strftime
 from bson.objectid import ObjectId
+from threading import Lock
+from flask_socketio import SocketIO, emit, join_room, leave_room, \
+    close_room, rooms, disconnect
 
 import pprint
 import os
@@ -13,6 +16,9 @@ import dns
 import sys
 
 app = Flask(__name__)
+socketio = SocketIO(app, async_mode=None)
+thread = None
+thread_lock = Lock()
 
 app.debug = True #Change this to False for production
 app.secret_key = os.environ['SECRET_KEY'] #used to sign session cookies
@@ -46,11 +52,17 @@ def background_thread():
 @socketio.on('connect')
 def test_connect():
     print('here')
-    global thread #this is a global varible which is the same across all cleints
-    with thread_lock: #locks the global varible so only one client can use it at a time
-        if thread is None:
-            thread=socketio.start_background_task(target=background_thread)
-    emit('start', 'connected')# this is the message that goes along with start in the JQuery code
+    if session['user_data']['login'] == '':
+        yeet='yeet'
+    else:
+        #global user
+        global thread #this is a global varible which is the same across all cleints
+        with thread_lock: #locks the global varible so only one client can use it at a time
+            #with user_lock:
+            #    user=['user_data']['login']
+            if thread is None:
+                thread=socketio.start_background_task(target=background_thread)
+            emit('start', 'connected')# this is the message that goes along with start in the JQuery code
 
 @app.context_processor
 def inject_logged_in():
@@ -58,7 +70,11 @@ def inject_logged_in():
 
 @app.route('/')
 def Forum1():
-    return render_template('Home.html')
+    try:
+        print(session['user_data']['login'])
+        return render_template('Home.html')
+    except:
+        return render_template('Home.html')
 
 @app.route('/p2')
 def Forum2():
@@ -75,7 +91,7 @@ def login():
 @app.route('/logout')
 def logout():
     session.clear()
-    return render_template('message.html', message='You were logged out')
+    return render_template('Home.html', message='You were logged out')
 
 @app.route('/login/authorized')
 def authorized():
@@ -92,7 +108,7 @@ def authorized():
             session.clear()
             print(inst)
             message='Unable to login, please try again.  '
-    return render_template('message.html', message=message)
+    return render_template('Home.html', message=message)
 
 #the tokengetter is automatically called to check who is logged in.
 @github.tokengetter

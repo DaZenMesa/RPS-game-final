@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title %}Forum{% endblock %}
+
+{% block content %}
+<head>
+    <title>Test</title>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            namespace = '/';
+            // Connect to the Socket.IO server.
+            // The connection URL has the following format:
+            //     http[s]://<domain>:<port>[/<namespace>]
+            var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
+            //Evnt handler for connecting
+            socket.on('start',function(msg){
+                $('#start').text(msg);
+            });
+            //count event
+            socket.on('count_event', function(msg){
+                $('#log').append('<br>'+msg);
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Flask-SocketIO Demo</h1>
+
+	  <p id="start"></p>
+
+    <h2>Receive:</h2>
+    <div id="log"></div>
+
+</body>
+{% endblock %}

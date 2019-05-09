@@ -36,6 +36,21 @@ github = oauth.remote_app(
 #TODO: Create the file on Heroku using os.system.  Ex) os.system("echo '[]'>"+myFile) puts '[]' into your file
 #os.system("echo '[]'>"+pdata)
 
+def background_thread():
+    count=0
+    while True:
+        socketio.sleep(5) #wait 5 seconds
+        count=count+1
+        socketio.emit('count_event', count) #sends out the varible count to all of the cleints
+
+@socketio.on('connect')
+def test_connect():
+    print('here')
+    global thread #this is a global varible which is the same across all cleints
+    with thread_lock: #locks the global varible so only one client can use it at a time
+        if thread is None:
+            thread=socketio.start_background_task(target=background_thread)
+    emit('start', 'connected')# this is the message that goes along with start in the JQuery code
 
 @app.context_processor
 def inject_logged_in():
@@ -43,17 +58,15 @@ def inject_logged_in():
 
 @app.route('/')
 def Forum1():
-    return render_template('Forum1.html')
+    return render_template('Home.html')
 
 @app.route('/p2')
 def Forum2():
-    return render_template('Forum2.html')
-	
+    return render_template('StartGame.html')
+
 @app.route('/p1')
 def info():
     return render_template('info.html')
-    
-    
 
 @app.route('/login')
 def login():

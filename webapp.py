@@ -4,6 +4,9 @@ from flask_oauthlib.client import OAuth
 from flask import render_template
 from time import localtime, strftime
 from bson.objectid import ObjectId
+from threading import Lock
+from flask_socketio import SocketIO, emit, join_room, leave_room, \
+    close_room, rooms, disconnect
 
 import pprint
 import os
@@ -13,6 +16,9 @@ import dns
 import sys
 
 app = Flask(__name__)
+socketio = SocketIO(app, async_mode=None)
+thread = None
+thread_lock = Lock()
 
 app.debug = True #Change this to False for production
 app.secret_key = os.environ['SECRET_KEY'] #used to sign session cookies
@@ -36,6 +42,27 @@ github = oauth.remote_app(
 #TODO: Create the file on Heroku using os.system.  Ex) os.system("echo '[]'>"+myFile) puts '[]' into your file
 #os.system("echo '[]'>"+pdata)
 
+def background_thread():
+    count=0
+    while True:
+        socketio.sleep(5) #wait 5 seconds
+        count=count+1
+        socketio.emit('count_event', count) #sends out the varible count to all of the cleints
+
+@socketio.on('connect')
+def test_connect():
+    print('here')
+    if session['user_data']['login'] == '':
+        yeet='yeet'
+    else:
+        #global user
+        global thread #this is a global varible which is the same across all cleints
+        with thread_lock: #locks the global varible so only one client can use it at a time
+            #with user_lock:
+            #    user=['user_data']['login']
+            if thread is None:
+                thread=socketio.start_background_task(target=background_thread)
+            emit('start', 'connected')# this is the message that goes along with start in the JQuery code
 
 @app.context_processor
 def inject_logged_in():
@@ -43,11 +70,15 @@ def inject_logged_in():
 
 @app.route('/')
 def Forum1():
-    return render_template('Forum1.html')
+    try:
+        print(session['user_data']['login'])
+        return render_template('Home.html')
+    except:
+        return render_template('Home.html')
 
 @app.route('/Forum2')
 def Forum2():
-    return render_template('Forum2.html')
+    return render_template('StartGame.html')
 
 @app.route('/login')
 def login():
@@ -56,7 +87,7 @@ def login():
 @app.route('/logout')
 def logout():
     session.clear()
-    return render_template('message.html', message='You were logged out')
+    return render_template('Home.html', message='You were logged out')
 
 @app.route('/login/authorized')
 def authorized():
@@ -73,7 +104,7 @@ def authorized():
             session.clear()
             print(inst)
             message='Unable to login, please try again.  '
-    return render_template('message.html', message=message)
+    return render_template('Home.html', message=message)
 
 #the tokengetter is automatically called to check who is logged in.
 @github.tokengetter

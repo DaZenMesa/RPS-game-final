@@ -45,15 +45,9 @@ def inject_logged_in():
 def Forum1():
     return render_template('Forum1.html')
 
-@app.route('/p2')
+@app.route('/Forum2')
 def Forum2():
     return render_template('Forum2.html')
-	
-@app.route('/p1')
-def info():
-    return render_template('info.html')
-    
-    
 
 @app.route('/login')
 def login():

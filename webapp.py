@@ -78,7 +78,7 @@ def inject_logged_in():
     return {"logged_in":('github_token' in session)}
 
 @app.route('/')
-def Forum1():
+def home():
     try:
         print(session['user_data']['login'])
         return render_template('Home.html')
@@ -86,12 +86,12 @@ def Forum1():
         return render_template('Home.html')
 
 @app.route('/p2')
-def Forum2():
+def StartGame():
     return render_template('StartGame.html')
 
-@app.route('/p1')
-def info():
-    return render_template('info.html')
+@app.route('/p3')
+def Info():
+    return render_template('Info.html')
 
 @app.route('/login')
 def login():

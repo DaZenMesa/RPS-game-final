@@ -85,11 +85,11 @@ def home():
     except:
         return render_template('Home.html')
 
-@app.route('/p2')
+@app.route('/p3')
 def StartGame():
     return render_template('StartGame.html')
 
-@app.route('/p3')
+@app.route('/p2')
 def Info():
     return render_template('Info.html')
 

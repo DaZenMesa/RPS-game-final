@@ -17,7 +17,9 @@ import sys
 
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode=None)
+usernum=None
 thread = None
+usernum_lock=Lock()
 thread_lock = Lock()
 
 app.debug = True #Change this to False for production
@@ -68,38 +70,45 @@ def background_thread():
 
 @socketio.on('connect')
 def test_connect():
-    print('here')
-    if session['user_data']['login'] == '':
-        yeet='yeet'
-    else:
-        #global user
-        global thread #this is a global varible which is the same across all cleints
-        with thread_lock: #locks the global varible so only one client can use it at a time
-            #with user_lock:
-            #    user=['user_data']['login']
-            if thread is None:
-                thread=socketio.start_background_task(target=background_thread)
-            emit('start', 'connected')# this is the message that goes along with start in the JQuery code
+    global usernum
+    print(usernum)
+    with usernum_lock:
+        if usernum == 2:
+            redirect(Home.html)
+        else:
+            print(usernum)
+            if session['user_data']['login'] == '':
+                yeet='yeet'
+            else:
+                global thread #this is a global varible which is the same across all cleints
+                with thread_lock: #locks the global varible so only one client can use it at a time
 
+                    #with user_lock:
+                    #      user=['user_data']['login']
+                    if thread is None:
+                        thread=socketio.start_background_task(target=background_thread)
+                        emit('start', 'connected')# this is the message that goes along with start in the JQuery code
+                        usernum=0
+                usernum=usernum+1
 @app.context_processor
 def inject_logged_in():
     return {"logged_in":('github_token' in session)}
 
 @app.route('/')
-def Forum1():
+def home():
     try:
         print(session['user_data']['login'])
         return render_template('Home.html')
     except:
         return render_template('Home.html')
 
-@app.route('/p2')
-def Forum2():
+@app.route('/p3')
+def StartGame():
     return render_template('StartGame.html')
 
-@app.route('/p1')
-def info():
-    return render_template('info.html')
+@app.route('/p2')
+def Info():
+    return render_template('Info.html')
 
 @app.route('/login')
 def login():

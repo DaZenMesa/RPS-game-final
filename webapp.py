@@ -42,6 +42,23 @@ github = oauth.remote_app(
 #TODO: Create the file on Heroku using os.system.  Ex) os.system("echo '[]'>"+myFile) puts '[]' into your file
 #os.system("echo '[]'>"+pdata)
 
+def main():
+    url = 'mongodb://{}:{}@{}/{}'.format(
+        os.environ["MONGO_USERNAME"],
+        os.environ["MONGO_PASSWORD"],
+        os.environ["MONGO_HOST"],
+        #os.environ["MONGO_PORT"],
+        os.environ["MONGO_DBNAME"])
+    #mongodb+srv://admin:<password>@cluster0-oe70w.mongodb.net/test?retryWrites=true
+    client = pymongo.MongoClient(os.environ["MONGO_HOST"])
+    db = client[os.environ["MONGO_DBNAME"]]
+    collection = db['scores'] #put the name of your collection in the quotes
+    if session['user_data']['login'] != '':
+        
+	    
+		
+
+
 def background_thread():
     count=0
     while True:

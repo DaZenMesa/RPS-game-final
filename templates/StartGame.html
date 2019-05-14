@@ -15,9 +15,10 @@
             //     http[s]://<domain>:<port>[/<namespace>]
             var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
             //Evnt handler for connecting
-            socket.on('start',function(msg){
-                $('#start').text(msg);
-            });
+            socket.on('connection', function(socket){
+                socket.join('some room');
+                $('#connection').text(msg);
+              });
             //count event
             socket.on('count_event', function(msg){
                 $('#log').append('<br>'+msg);

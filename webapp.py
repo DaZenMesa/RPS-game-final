@@ -17,7 +17,7 @@ import sys
 
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode=None)
-usernum=None
+usernum=0
 thread = None
 usernum_lock=Lock()
 thread_lock = Lock()
@@ -56,10 +56,10 @@ def test_connect():
     global usernum
     print(usernum)
     with usernum_lock:
-        if usernum == 2:
-            redirect(Home.html)
+        if usernum > 1:
+            print('redirect')
+            return redirect(url_for('/'))
         else:
-            print(usernum)
             if session['user_data']['login'] == '':
                 yeet='yeet'
             else:
@@ -70,9 +70,10 @@ def test_connect():
                     #      user=['user_data']['login']
                     if thread is None:
                         thread=socketio.start_background_task(target=background_thread)
-                        emit('start', 'connected')# this is the message that goes along with start in the JQuery code
-                        usernum=0
-                usernum=usernum+1
+                        socketio.to('some room').emit('connection', 'connected')# this is the message that goes along with start in the JQuery code
+                        usernum=1
+                    usernum=usernum+1
+                    print('here')
 @app.context_processor
 def inject_logged_in():
     return {"logged_in":('github_token' in session)}
@@ -123,7 +124,6 @@ def authorized():
 @github.tokengetter
 def get_github_oauth_token():
     return session.get('github_token')
-
 
 if __name__ == '__main__':
     os.system("echo json(array) > file")

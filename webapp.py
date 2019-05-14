@@ -57,7 +57,7 @@ def test_connect():
     print(usernum)
     with usernum_lock:
         if usernum == 2:
-            redirect(Home.html)
+            return redirect(url_for(".home"))
         else:
             print(usernum)
             if session['user_data']['login'] == '':

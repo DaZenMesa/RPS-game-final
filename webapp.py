@@ -105,6 +105,19 @@ def home():
 def StartGame():
     return render_template('StartGame.html')
 
+@app.route('/button', methods=['POST'])
+def Button():
+    print(request.form)
+    if 'Rock' in request.form:
+        print("rock")
+    print(request.form)
+    if 'Paper'in request.form:
+        print("paper")
+    print(request.form)
+    if 'Scissors' in request.form: 
+        print("scissors")
+    return redirect(url_for("StartGame"))
+
 @app.route('/p2')
 def Info():
     return render_template('Info.html')

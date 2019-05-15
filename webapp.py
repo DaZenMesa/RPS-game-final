@@ -44,21 +44,29 @@ github = oauth.remote_app(
 #TODO: Create the file on Heroku using os.system.  Ex) os.system("echo '[]'>"+myFile) puts '[]' into your file
 #os.system("echo '[]'>"+pdata)
 
-def main():
-    url = 'mongodb://{}:{}@{}/{}'.format(
-        os.environ["MONGO_USERNAME"],
-        os.environ["MONGO_PASSWORD"],
-        os.environ["MONGO_HOST"],
-        #os.environ["MONGO_PORT"],
-        os.environ["MONGO_DBNAME"])
-    #mongodb+srv://admin:<password>@cluster0-oe70w.mongodb.net/test?retryWrites=true
-    client = pymongo.MongoClient(os.environ["MONGO_HOST"])
-    db = client[os.environ["MONGO_DBNAME"]]
-    collection = db['scores'] #put the name of your collection in the quotes
+url = 'mongodb://{}:{}@{}/{}'.format(
+    os.environ["MONGO_USERNAME"],
+    os.environ["MONGO_PASSWORD"],
+    os.environ["MONGO_HOST"],
+    #os.environ["MONGO_PORT"],
+     os.environ["MONGO_DBNAME"])
+#mongodb+srv://admin:<password>@cluster0-oe70w.mongodb.net/test?retryWrites=true
+client = pymongo.MongoClient(os.environ["MONGO_HOST"])
+db = client[os.environ["MONGO_DBNAME"]]
+collection = db['scores'] #put the name of your collection in the quotes
+    
+    
+    
+def database():
     if session['user_data']['login'] != '':
+        if not collection.find_one({session['user_data']['login']:{'$gt':-1}}) == None:
+            return collection.find_one({session['user_data']['login']:{'$gt':-1}})[session['user_data']['login']]
+        else:
+            collection.insert_one({session['user_data']['login']: 0})
+            return 0
         
-	    
-		
+        
+
 
 
 def background_thread():
@@ -66,6 +74,7 @@ def background_thread():
     while True:
         socketio.sleep(5) #wait 5 seconds
         count=count+1
+        collection.update({session['user_data']['login']: database()}, {'$set':{session['user_data']['login']: database() + count}})
         socketio.emit('count_event', count) #sends out the varible count to all of the cleints
 
 @socketio.on('connect')

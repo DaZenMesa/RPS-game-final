@@ -15,13 +15,22 @@
             //     http[s]://<domain>:<port>[/<namespace>]
             var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
             //Evnt handler for connecting
-            socket.on('connection', function(socket){
-                socket.join('some room');
-                $('#connection').text(msg);
+            socket.on('connection1', function(msg){
+                socket.join('room1');
+                $('#connection1').text(msg);
               });
             //count event
-            socket.on('count_event', function(msg){
-                $('#log').append('<br>'+msg);
+            socket.on('count_event1', function(msg){
+                $('#log1').append('<br>'+msg);
+
+            });
+            socket.on('connection2', function(msg){
+                socket.join('room2');
+                $('#connection2').text(msg);
+              });
+            //count event
+            socket.on('count_event2', function(msg){
+                $('#log2').append('<br>'+msg);
             });
         });
     </script>
@@ -32,7 +41,7 @@
 	  <p id="start"></p>
 
     <h2>Receive:</h2>
-    <div id="log"></div>
-
+    <div id="log1"></div>
+    <div id="log2"></div>
 </body>
 {% endblock %}

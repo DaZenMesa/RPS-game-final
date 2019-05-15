@@ -18,9 +18,11 @@ import sys
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode=None)
 usernum=0
-thread = None
+thread1 = None
 usernum_lock=Lock()
-thread_lock = Lock()
+thread1_lock = Lock()
+thread2 = None
+thread2_lock = Lock()
 
 app.debug = True #Change this to False for production
 app.secret_key = os.environ['SECRET_KEY'] #used to sign session cookies
@@ -44,36 +46,49 @@ github = oauth.remote_app(
 #TODO: Create the file on Heroku using os.system.  Ex) os.system("echo '[]'>"+myFile) puts '[]' into your file
 #os.system("echo '[]'>"+pdata)
 
-def background_thread():
+def background_thread1():
     count=0
     while True:
         socketio.sleep(5) #wait 5 seconds
         count=count+1
-        socketio.emit('count_event', count) #sends out the varible count to all of the cleints
+        socketio.emit('count_event1', count) #sends out the varible count to all of the cleints
+
+def background_thread2():
+    count=0
+    while True:
+        socketio.sleep(5) #wait 5 seconds
+        count=count+1
+        socketio.emit('count_event2', count) #sends out the varible count to all of the cleints
 
 @socketio.on('connect')
 def test_connect():
     global usernum
-    print(usernum)
     with usernum_lock:
-        if usernum > 1:
-            print('redirect')
-            return redirect(url_for('/'))
+        print(usernum)
+        if usernum >= 2:
+            if session['user_data']['login'] == '':
+                yeet='yeet'
+            else:
+                global thread2 #this is a global varible which is the same across all cleints
+                with thread2_lock: #locks the global varible so only one client can use it at a time
+                    if thread2 is None:
+                        thread2=socketio.start_background_task(target=background_thread2)
+                        socketio.to('room2').emit('connection2', 'connected')# this is the message that goes along with start in the JQuery code
+                        usernum=1
+                    usernum=usernum+1
+                    print('here2')
         else:
             if session['user_data']['login'] == '':
                 yeet='yeet'
             else:
-                global thread #this is a global varible which is the same across all cleints
-                with thread_lock: #locks the global varible so only one client can use it at a time
-
-                    #with user_lock:
-                    #      user=['user_data']['login']
-                    if thread is None:
-                        thread=socketio.start_background_task(target=background_thread)
-                        socketio.to('some room').emit('connection', 'connected')# this is the message that goes along with start in the JQuery code
+                global thread1 #this is a global varible which is the same across all cleints
+                with thread1_lock: #locks the global varible so only one client can use it at a time
+                    if thread1 is None:
+                        thread1=socketio.start_background_task(target=background_thread1)
+                        socketio.to('room1').emit('connection1', 'connected')# this is the message that goes along with start in the JQuery code
                         usernum=1
                     usernum=usernum+1
-                    print('here')
+                    print('here1')
 @app.context_processor
 def inject_logged_in():
     return {"logged_in":('github_token' in session)}

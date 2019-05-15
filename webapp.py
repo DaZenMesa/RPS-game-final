@@ -52,6 +52,17 @@ def background_thread():
         socketio.emit('count_event', count) #sends out the varible count to all of the cleints
         
         
+        
+        # if client 1 = 'Rock' and client 2 = 'Paper': print client 2 won 
+        # if client 1 = 'Paper' and client 2 = 'Rock': print client 1 won 
+        # if client 1 = 'Scissors' and client 2 = 'Paper': print client 1 won 
+        # if client 1 = 'Paper' and client 2 = 'Scissors': print client 2 won 
+        # if client 1 = 'Rock' and client 2 = 'Scissors': print client 1 won 
+        # if client 1 = 'Scissors' and client 2 = 'Rock': print client 2 won 
+        
+        
+        
+        
         #win=request.form["Rock"] win=request.form["Paper"] win=request.form["Scissors"]
         
        
@@ -95,13 +106,13 @@ def StartGame():
     
 @app.route('/button', methods=['POST'])
 def Button():   
-    print(request.form)
+    
     if 'Rock' in request.form: 
         print("rock")
-    print(request.form)
+   
     if 'Paper'in request.form: 
         print("paper")
-    print(request.form)
+   
     if 'Scissors' in request.form: 
         print("scissors")
     return redirect(url_for("StartGame"))

@@ -50,14 +50,23 @@ def background_thread():
         socketio.sleep(5) #wait 5 seconds
         count=count+1
         socketio.emit('count_event', count) #sends out the varible count to all of the cleints
-
+        if request.form["Rock"] is pressed: 
+            print("rock")
+        if request.form["Paper"] is pressed: 
+            print("paper")
+        if request.form["Scissors"] is pressed: 
+            print("scissors")
+        
+        #win=request.form["Rock"] win=request.form["Paper"] win=request.form["Scissors"]
+        
+       
 @socketio.on('connect')
 def test_connect():
     global usernum
     print(usernum)
     with usernum_lock:
         if usernum == 2:
-            redirect(Home.html)
+            return redirect(url_for(".home"))
         else:
             print(usernum)
             if session['user_data']['login'] == '':

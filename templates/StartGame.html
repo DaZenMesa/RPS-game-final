@@ -31,16 +31,18 @@
 	  <p id="start"></p>
 
     <h2>Receive:</h2>
-    <form  method="post">  <!-- /action='/delete' -->
-    <input type="hidden" name="Rock">
-    <button type="button" class="btn btn-secondary">Rock</button>
+    <form  method="post" action='/button'>  
+    <input type="submit" name="Rock" value= 'Rock'>
+    </form>
     
-    <input type="hidden" name="Paper">
-    <button type="button" class="btn btn-warning">Paper</button>
+   
+    <form  method="post" action='/button'>  
+    <input type="submit" name="Paper"  value= 'Paper'>
+    </form>
     
-    <input type="hidden" name="Scissors">
-    <button type="button" class="btn btn-primary">Scissors</button>
-    
+    <form  method="post" action='/button'>
+    <input type="submit" name="Scissors"  value= 'Scissors'>
+    </form>
     
     </form>
     <div id="log"></div>

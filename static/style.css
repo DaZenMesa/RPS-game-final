@@ -1,0 +1,28 @@
+
+body {
+  background-color: lightblue;
+}
+#rock {
+  margin-right: 50px;
+  margin-left: 50px;
+  margin-bottom: 50px;
+  color: #007D32;
+  background-color: #FFABD5;
+ 
+}
+#paper {
+  margin-right: 50px;
+  margin-left: 50px;
+  margin-bottom: 50px;
+  color: EFFF06;
+  background-color: #FFABD5;
+}
+#scissors {
+  margin-right: 50px;
+  margin-left: 50px;
+  margin-bottom: 50px;
+  color: #33CCCC;
+  background-color: #FFABD5;
+}
+
+

@@ -51,6 +51,7 @@ def background_thread1():
     while True:
         socketio.sleep(5) #wait 5 seconds
         count=count+1
+<<<<<<< HEAD
         socketio.emit('count_event1', count) #sends out the varible count to all of the cleints
 
 def background_thread2():
@@ -60,10 +61,30 @@ def background_thread2():
         count=count+1
         socketio.emit('count_event2', count) #sends out the varible count to all of the cleints
 
+=======
+        socketio.emit('count_event', count) #sends out the varible count to all of the cleints
+        
+        
+        
+        # if client 1 = 'Rock' and client 2 = 'Paper': print client 2 won 
+        # if client 1 = 'Paper' and client 2 = 'Rock': print client 1 won 
+        # if client 1 = 'Scissors' and client 2 = 'Paper': print client 1 won 
+        # if client 1 = 'Paper' and client 2 = 'Scissors': print client 2 won 
+        # if client 1 = 'Rock' and client 2 = 'Scissors': print client 1 won 
+        # if client 1 = 'Scissors' and client 2 = 'Rock': print client 2 won 
+        
+        
+        
+        
+        #win=request.form["Rock"] win=request.form["Paper"] win=request.form["Scissors"]
+        
+       
+>>>>>>> e9f86b0174739dfa101202db835820e1f050a0fa
 @socketio.on('connect')
 def test_connect():
     global usernum
     with usernum_lock:
+<<<<<<< HEAD
         print(usernum)
         if usernum >= 2:
             if session['user_data']['login'] == '':
@@ -77,6 +98,10 @@ def test_connect():
                         usernum=1
                     usernum=usernum+1
                     print('here2')
+=======
+        if usernum == 2:
+            return redirect(url_for(".home"))
+>>>>>>> e9f86b0174739dfa101202db835820e1f050a0fa
         else:
             if session['user_data']['login'] == '':
                 yeet='yeet'
@@ -104,6 +129,19 @@ def home():
 @app.route('/p3')
 def StartGame():
     return render_template('StartGame.html')
+    
+@app.route('/button', methods=['POST'])
+def Button():   
+    
+    if 'Rock' in request.form: 
+        print("rock")
+   
+    if 'Paper'in request.form: 
+        print("paper")
+   
+    if 'Scissors' in request.form: 
+        print("scissors")
+    return redirect(url_for("StartGame"))
 
 @app.route('/button', methods=['POST'])
 def Button():

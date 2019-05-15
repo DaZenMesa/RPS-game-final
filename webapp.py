@@ -50,12 +50,7 @@ def background_thread():
         socketio.sleep(5) #wait 5 seconds
         count=count+1
         socketio.emit('count_event', count) #sends out the varible count to all of the cleints
-        if request.form["Rock"] is pressed: 
-            print("rock")
-        if request.form["Paper"] is pressed: 
-            print("paper")
-        if request.form["Scissors"] is pressed: 
-            print("scissors")
+        
         
         #win=request.form["Rock"] win=request.form["Paper"] win=request.form["Scissors"]
         
@@ -97,6 +92,19 @@ def home():
 @app.route('/p3')
 def StartGame():
     return render_template('StartGame.html')
+    
+@app.route('/button', methods=['POST'])
+def Button():   
+    print(request.form)
+    if 'Rock' in request.form: 
+        print("rock")
+    print(request.form)
+    if 'Paper'in request.form: 
+        print("paper")
+    print(request.form)
+    if 'Scissors' in request.form: 
+        print("scissors")
+    return redirect(url_for("StartGame"))
 
 @app.route('/p2')
 def Info():

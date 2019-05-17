@@ -63,6 +63,7 @@ def database():
             return collection.find_one({session['user_data']['login']:{'$gt':-1}})[session['user_data']['login']]
         else:
             collection.insert_one({session['user_data']['login']: 0})
+            print('x')
             return 0
         
         
@@ -74,7 +75,7 @@ def background_thread():
     while True:
         socketio.sleep(5) #wait 5 seconds
         count=count+1
-        collection.update({session['user_data']['login']: database()}, {'$set':{session['user_data']['login']: database() + count}})
+        #collection.update({session['user_data']['login']: database()}, {'$set':{session['user_data']['login']: database() + count}})
         socketio.emit('count_event', count) #sends out the varible count to all of the cleints
         if request.form["Rock"] is pressed: 
             print("rock")
@@ -126,6 +127,7 @@ def StartGame():
 
 @app.route('/p2')
 def Info():
+    collection.insert_one({session['user_data']['login']: 0})
     return render_template('Info.html')
 
 @app.route('/login')

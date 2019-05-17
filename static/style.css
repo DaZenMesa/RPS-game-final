@@ -7,7 +7,7 @@ body {
   margin-left: 50px;
   margin-bottom: 50px;
   color: #007D32;
-  background-color: #FFABD5;
+  background-color: #849fcc;
  
 }
 #paper {
@@ -15,14 +15,14 @@ body {
   margin-left: 50px;
   margin-bottom: 50px;
   color: EFFF06;
-  background-color: #FFABD5;
+  background-color: #849fcc;
 }
 #scissors {
   margin-right: 50px;
   margin-left: 50px;
   margin-bottom: 50px;
   color: #33CCCC;
-  background-color: #FFABD5;
+  background-color: #849fcc;
 }
 
 

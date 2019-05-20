@@ -34,6 +34,15 @@
             });
         });
     </script>
+	{% if buttonpressed == "True" %}
+	<script type='text/javascript'>
+		window.onload=function(){<!--  ww  w  .  java2  s. c o  m-->
+			document.getElementById("rock").style.visibility="hidden";
+			document.getElementById("paper").style.visibility="hidden";
+			document.getElementById("scissors").style.visibility="hidden";
+		}
+	</script>
+	{% endif %}
 </head>
 <body>
     <h1>Flask-SocketIO Demo</h1>

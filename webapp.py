@@ -151,7 +151,7 @@ def Button():
 
     if 'Scissors' in request.form:
         print("scissors")
-  
+
     global play1 
     with play1_lock:
         if play1 is None and 'Rock' in request.form:
@@ -174,7 +174,21 @@ def Button():
             print("paper played")
         if play2 is None and 'Scissors' in request.form:
             play2= request.form['Scissors']   
+
             print("scissors played")     
+
+            print("scissors played")
+        
+         # if client 1 = 'Rock' and client 2 = 'Paper': print client 2 won
+        # if client 1 = 'Paper' and client 2 = 'Rock': print client 1 won
+        # if client 1 = 'Scissors' and client 2 = 'Paper': print client 1 won
+        # if client 1 = 'Paper' and client 2 = 'Scissors': print client 2 won
+        # if client 1 = 'Rock' and client 2 = 'Scissors': print client 1 won
+        # if client 1 = 'Scissors' and client 2 = 'Rock': print client 2 won
+        # if client 1 = 'Scissors' and client 2 = 'Scissors': print tie
+        # if client 1 = 'Rock' and client 2 = 'Rock': print tie
+        # if client 1 = 'Paper' and client 2 = 'Paper': print tie
+
         
     return redirect(url_for("StartGame"))
 

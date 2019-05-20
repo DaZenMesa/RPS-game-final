@@ -30,6 +30,8 @@ play1 = None
 play1_lock = Lock()
 play2 = None
 play2_lock = Lock()
+var=False
+var_lock = Lock()
 #===============================================================================
 
 app.debug = True #Change this to False for production
@@ -70,18 +72,6 @@ def background_thread2():
         socketio.emit('count_event2', count) #sends out the varible count to all of the cleints
         socketio.emit('count_event', count) #sends out the varible count to all of the cleints
 
-
-        # if client 1 = 'Rock' and client 2 = 'Paper': print client 2 won
-        # if client 1 = 'Paper' and client 2 = 'Rock': print client 1 won
-        # if client 1 = 'Scissors' and client 2 = 'Paper': print client 1 won
-        # if client 1 = 'Paper' and client 2 = 'Scissors': print client 2 won
-        # if client 1 = 'Rock' and client 2 = 'Scissors': print client 1 won
-        # if client 1 = 'Scissors' and client 2 = 'Rock': print client 2 won
-        # if client 1 = 'Scissors' and client 2 = 'Scissors': print tie
-        # if client 1 = 'Rock' and client 2 = 'Rock': print tie
-        # if client 1 = 'Paper' and client 2 = 'Paper': print tie
-
-         
 
         #win=request.form["Rock"] win=request.form["Paper"] win=request.form["Scissors"]
 
@@ -142,7 +132,7 @@ def StartGame():
 
 @app.route('/button', methods=['POST'])
 def Button():
-   
+    global var
     if 'Rock' in request.form:
         print("rock")
 
@@ -151,43 +141,54 @@ def Button():
 
     if 'Scissors' in request.form:
         print("scissors")
+    with var_lock:   
+        if var == False:
+            global play1 
+            with play1_lock:
+                if play1 is None and 'Rock' in request.form:
+                    play1= request.form['Rock']   
+                    print("rock played")
+                if play1 is None and 'Paper' in request.form:
+                    play1= request.form['Paper']   
+                    print("paper played")
+                if play1 is None and 'Scissors' in request.form:
+                    play1= request.form['Scissors']   
+                    print("scissors played")
+                var= True
+                print(var)
+        else:     
+            global play2 
+            with play2_lock:
+                if play2 is None and 'Rock' in request.form:
+                    play2= request.form['Rock']   
+                    print("rock played2")
+                if play2 is None and 'Paper' in request.form:
+                    play2= request.form['Paper']   
+                    print("paper played2")
+                if play2 is None and 'Scissors' in request.form:
+                    play2= request.form['Scissors']   
+                    print("scissors played2")     
 
-    global play1 
-    with play1_lock:
-        if play1 is None and 'Rock' in request.form:
-            play1= request.form['Rock']   
-            print("rock played")
-        if play1 is None and 'Paper' in request.form:
-            play1= request.form['Paper']   
-            print("paper played")
-        if play1 is None and 'Scissors' in request.form:
-            play1= request.form['Scissors']   
-            print("scissors played")
+            
         
-    global play2 
-    with play2_lock:
-        if play2 is None and 'Rock' in request.form:
-            play2= request.form['Rock']   
-            print("rock played2")
-        if play2 is None and 'Paper' in request.form:
-            play2= request.form['Paper']   
-            print("paper played")
-        if play2 is None and 'Scissors' in request.form:
-            play2= request.form['Scissors']   
-
-            print("scissors played")     
-
-            print("scissors played")
-        
-         # if client 1 = 'Rock' and client 2 = 'Paper': print client 2 won
-        # if client 1 = 'Paper' and client 2 = 'Rock': print client 1 won
-        # if client 1 = 'Scissors' and client 2 = 'Paper': print client 1 won
-        # if client 1 = 'Paper' and client 2 = 'Scissors': print client 2 won
-        # if client 1 = 'Rock' and client 2 = 'Scissors': print client 1 won
-        # if client 1 = 'Scissors' and client 2 = 'Rock': print client 2 won
-        # if client 1 = 'Scissors' and client 2 = 'Scissors': print tie
-        # if client 1 = 'Rock' and client 2 = 'Rock': print tie
-        # if client 1 = 'Paper' and client 2 = 'Paper': print tie
+    if play1 == 'Rock' and play2 == 'Paper':
+        print('client 2 won') # set {{sen}} == 'client 2 won'
+    if play1 == 'Paper' and play2 == 'Rock':
+        print ('client 1 won')
+    if play1 == 'Scissors' and play2 == 'Paper': 
+        print ('client 1 won')
+    if play1  == 'Paper' and play2  == 'Scissors': 
+        print ('client 2 won')
+    if play1  == 'Rock' and play2  == 'Scissors':
+        print ('client 1 won')
+    if play1  == 'Scissors' and play2  == 'Rock':
+        print('client 2 won')
+    if play1  == 'Scissors' and play2  == 'Scissors':
+        print('tie')
+    if play1  =='Rock' and play2  == 'Rock':
+        print('tie')
+    if play1  == 'Paper' and play2  == 'Paper': 
+        print('tie')
 
         
     return redirect(url_for("StartGame"))

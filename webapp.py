@@ -151,11 +151,7 @@ def Button():
 
     if 'Scissors' in request.form:
         print("scissors")
-        
-        
-        
-        
-        
+  
     global play1 
     with play1_lock:
         if play1 is None and 'Rock' in request.form:
@@ -178,11 +174,7 @@ def Button():
             print("paper played")
         if play2 is None and 'Scissors' in request.form:
             play2= request.form['Scissors']   
-            print("scissors played")
-
-        
-        
-        
+            print("scissors played")     
         
     return redirect(url_for("StartGame"))
 

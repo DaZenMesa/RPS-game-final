@@ -254,7 +254,8 @@ def Button():
             
         
     if play1 == 'Rock' and play2 == 'Paper':
-        print('client 2 won') # set {{sen}} == 'client 2 won'
+        print('client 2 won') 
+        {{sen}} = 'client 2 won'
     if play1 == 'Paper' and play2 == 'Rock':
         print ('client 1 won')
     if play1 == 'Scissors' and play2 == 'Paper': 

@@ -30,6 +30,8 @@ play1 = None
 play1_lock = Lock()
 play2 = None
 play2_lock = Lock()
+var=False
+var_lock = Lock()
 #===============================================================================
 
 app.debug = True #Change this to False for production
@@ -62,30 +64,57 @@ def background_thread1():
 
 #===============================================================================
 
+
+url = 'mongodb://{}:{}@{}/{}'.format(
+    os.environ["MONGO_USERNAME"],
+    os.environ["MONGO_PASSWORD"],
+    os.environ["MONGO_HOST"],
+    #os.environ["MONGO_PORT"],
+     os.environ["MONGO_DBNAME"])
+#mongodb+srv://admin:<password>@cluster0-oe70w.mongodb.net/test?retryWrites=true
+client = pymongo.MongoClient(os.environ["MONGO_HOST"])
+db = client[os.environ["MONGO_DBNAME"]]
+collection = db['scores'] #put the name of your collection in the quotes
+    
+    
+    
+def database():
+    if session['user_data']['login'] != '':
+        if not collection.find_one({session['user_data']['login']:{'$gt':-1}}) == None:
+            return collection.find_one({session['user_data']['login']:{'$gt':-1}})[session['user_data']['login']]
+        else:
+            collection.insert_one({session['user_data']['login']: 0})
+            print('x')
+            return 0
+        
+        
+
+
+
+
 def background_thread2():
+
     count=0
     while True:
         socketio.sleep(5) #wait 5 seconds
         count=count+1
+        #collection.update({session['user_data']['login']: database()}, {'$set':{session['user_data']['login']: database() + count}})
         socketio.emit('count_event2', count) #sends out the varible count to all of the cleints
         socketio.emit('count_event', count) #sends out the varible count to all of the cleints
 
+        
+        
+         # if client 1 = 'Rock' and client 2 = 'Paper': print client 2 won
 
-        # if client 1 = 'Rock' and client 2 = 'Paper': print client 2 won
-        # if client 1 = 'Paper' and client 2 = 'Rock': print client 1 won
-        # if client 1 = 'Scissors' and client 2 = 'Paper': print client 1 won
-        # if client 1 = 'Paper' and client 2 = 'Scissors': print client 2 won
-        # if client 1 = 'Rock' and client 2 = 'Scissors': print client 1 won
-        # if client 1 = 'Scissors' and client 2 = 'Rock': print client 2 won
-        # if client 1 = 'Scissors' and client 2 = 'Scissors': print tie
-        # if client 1 = 'Rock' and client 2 = 'Rock': print tie
-        # if client 1 = 'Paper' and client 2 = 'Paper': print tie
 
-         
 
         #win=request.form["Rock"] win=request.form["Paper"] win=request.form["Scissors"]
 
 #===============================================================================
+
+
+
+       
 
 @socketio.on('connect')
 def test_connect():
@@ -136,13 +165,18 @@ def home():
 
 @app.route('/p3')
 def StartGame():
-    return render_template('StartGame.html')
+    if not collection.find_one({session['user_data']['login']:{'$gt':-1}}) == None:
+        collection.update({session['user_data']['login']: database()}, {'$set':{session['user_data']['login']: database() + 1}})
+    return render_template('StartGame.html', username = session['user_data']['login'], score = database())
 
 #===============================================================================
 
 @app.route('/button', methods=['POST'])
 def Button():
     buttonpressed='False'
+
+    global var
+
     if 'Rock' in request.form:
         print("rock")
         buttonpressed='True'
@@ -151,6 +185,7 @@ def Button():
         buttonpressed='True'
     if 'Scissors' in request.form:
         print("scissors")
+
         buttonpressed='True'
     global play1 
     with play1_lock:
@@ -188,6 +223,56 @@ def Button():
         # if client 1 = 'Rock' and client 2 = 'Rock': print tie
         # if client 1 = 'Paper' and client 2 = 'Paper': print tie
 
+    with var_lock:   
+        if var == False:
+            global play1 
+            with play1_lock:
+                if play1 is None and 'Rock' in request.form:
+                    play1= request.form['Rock']   
+                    print("rock played")
+                if play1 is None and 'Paper' in request.form:
+                    play1= request.form['Paper']   
+                    print("paper played")
+                if play1 is None and 'Scissors' in request.form:
+                    play1= request.form['Scissors']   
+                    print("scissors played")
+                var= True
+                print(var)
+        else:     
+            global play2 
+            with play2_lock:
+                if play2 is None and 'Rock' in request.form:
+                    play2= request.form['Rock']   
+                    print("rock played2")
+                if play2 is None and 'Paper' in request.form:
+                    play2= request.form['Paper']   
+                    print("paper played2")
+                if play2 is None and 'Scissors' in request.form:
+                    play2= request.form['Scissors']   
+                    print("scissors played2")     
+
+            
+        
+    if play1 == 'Rock' and play2 == 'Paper':
+        print('client 2 won') # set {{sen}} == 'client 2 won'
+    if play1 == 'Paper' and play2 == 'Rock':
+        print ('client 1 won')
+    if play1 == 'Scissors' and play2 == 'Paper': 
+        print ('client 1 won')
+    if play1  == 'Paper' and play2  == 'Scissors': 
+        print ('client 2 won')
+    if play1  == 'Rock' and play2  == 'Scissors':
+        print ('client 1 won')
+    if play1  == 'Scissors' and play2  == 'Rock':
+        print('client 2 won')
+    if play1  == 'Scissors' and play2  == 'Scissors':
+        print('tie')
+    if play1  =='Rock' and play2  == 'Rock':
+        print('tie')
+    if play1  == 'Paper' and play2  == 'Paper': 
+        print('tie')
+
+
         
     return redirect(url_for("StartGame", buttonpressed=buttonpressed))
 
@@ -195,7 +280,7 @@ def Button():
 
 @app.route('/p2')
 def Info():
-    return render_template('Info.html')
+    return render_template('Info.html', username1 = session['user_data']['login'], username2 = session['user_data']['login'], username3 = session['user_data']['login'], score1 = database(), score2 = database(), score3 = database())
 
 #===============================================================================
 

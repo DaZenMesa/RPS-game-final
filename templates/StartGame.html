@@ -45,12 +45,14 @@
 	{% endif %}
 </head>
 <body>
+    <p> {{username}} score = {{score}} </p>
+    
     <h1>Flask-SocketIO Demo</h1>
 
 	  <p id="start"></p>
 
     <h2>Receive:</h2>
-    
+    <!--<p> {{sen}}</p> -->
 
     <form  method="post" action='/button'>
     <input type="submit" name="Rock" value= 'Rock' id='rock'>

@@ -32,8 +32,20 @@
             socket.on('count_event2', function(msg){
                 $('#log2').append('<br>'+msg);
             });
+			$(".dissapear").click(function(){
+	    $(".dissapear").hide();
+      });
         });
+		
     </script>
+	<!--{% if buttonpressed == "True" %}
+	<script type='text/javascript'>
+		window.onload=function(){<!--  ww  w  .  java2  s. c o  m
+			document.getElementById("rock").style.visibility="hidden";
+			document.getElementById("paper").style.visibility="hidden";
+			document.getElementById("scissors").style.visibility="hidden";
+		}-->
+	{% endif %}
 </head>
 <body>
     <p> {{username}} score = {{score}} </p>
@@ -43,18 +55,19 @@
 	  <p id="start"></p>
 
     <h2>Receive:</h2>
-    <p> {{sen}}</p> 
+    <!--<p> {{sen}}</p> -->
+	
 
-    <form  method="post" action='/button'>
+    <form  method="post" class="dissapear" action='/button'>
     <input type="submit" name="Rock" value= 'Rock' id='rock'>
     </form>
 
 
-    <form  method="post" action='/button'>
+    <form  method="post" class="dissapear" action='/button'>
     <input type="submit" name="Paper"  value= 'Paper' id='paper'>
     </form>
 
-    <form  method="post" action='/button'>
+    <form  method="post" class="dissapear" action='/button'>
     <input type="submit" name="Scissors"  value= 'Scissors'  id='scissors'>
     </form>
 

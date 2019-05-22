@@ -172,16 +172,22 @@ def Button():
     global cleint1
     global cleint2
     global var
+
     if 'Rock' in request.form:
         print("rock")
-
+        buttonpressed='True'
     if 'Paper'in request.form:
         print("paper")
-
+        buttonpressed='True'
     if 'Scissors' in request.form:
         print("scissors")
 
+
+
+
+
     with var_lock:
+
         if var == False:
             global play1
             with play1_lock:
@@ -213,6 +219,10 @@ def Button():
 
     session["response"]=' '
     if play1 == 'Rock' and play2 == 'Paper':
+
+        print('client 2 won')
+        #{{sen}} = 'client 2 won'
+
         print('client 2 won')
         var=False
         play1=None
@@ -287,6 +297,9 @@ def Button():
         session["response"]='The game was a tie'
     if play1  == 'Paper' and play2  == 'Paper':
         print('tie')
+
+
+
         var=False
         play1=None
         play2=None

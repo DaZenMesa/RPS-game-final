@@ -176,9 +176,12 @@ def home():
 
 @app.route('/p3')
 def StartGame():
-    if not collection.find_one({session['user_data']['login']:{'$gt':-1}}) == None:
-        collection.update({session['user_data']['login']: database()}, {'$set':{session['user_data']['login']: database() + 1}})
-    return render_template('StartGame.html', username = session['user_data']['login'], score = database())
+    if session['user_data']['login'] != '':
+        if not collection.find_one({session['user_data']['login']:{'$gt':-1}}) == None:
+            collection.update({session['user_data']['login']: database()}, {'$set':{session['user_data']['login']: database() + 1}})
+        return render_template('StartGame.html', username = session['user_data']['login'], score = database())
+    else:
+        return render_template('StartGame.html')
 
 #===============================================================================
 
@@ -217,7 +220,7 @@ def Button():
         if play2 is None and 'Scissors' in request.form:
             play2= request.form['Scissors']   
 
-            print("scissors played")     
+           #print("scissors played")     
 
             print("scissors played")
         
@@ -238,7 +241,26 @@ def Button():
 
 @app.route('/p2')
 def Info():
-    return render_template('Info.html', username1 = session['user_data']['login'], username2 = session['user_data']['login'], username3 = session['user_data']['login'], score1 = database(), score2 = database(), score3 = database())
+    x2 = 0
+    x3 = 0
+    x4 = 0
+    i2 = ""
+    for i in collection.find():
+        for x in i:
+            if x2 == 0:
+                if not x == "_id":
+                    print(i[x])
+                    x3 = i[x]
+                    i2 = x
+            else:
+                if not x == "_id":
+                    print(x)
+                    print(i[x])
+                    if i[x] > x3:
+                        x3 = i[x]
+                        i2 = x
+            x2 = 1
+    return render_template('Info.html', username1 = i2, username2 = session['user_data']['login'], username3 = session['user_data']['login'], score1 = x3, score2 = database(), score3 = database())
 
 #===============================================================================
 

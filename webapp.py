@@ -164,10 +164,10 @@ def home():
 #===============================================================================
 
 @app.route('/p3')
-def StartGame():
+def StartGame(response=""):
     if not collection.find_one({session['user_data']['login']:{'$gt':-1}}) == None:
         collection.update({session['user_data']['login']: database()}, {'$set':{session['user_data']['login']: database() + 1}})
-    return render_template('StartGame.html', username = session['user_data']['login'], score = database())
+    return render_template('StartGame.html', username = session['user_data']['login'], score = database(), sen = response)
 
 #===============================================================================
 
@@ -211,29 +211,37 @@ def Button():
                     print("scissors played2")     
 
             
-        
+    response=""    
     if play1 == 'Rock' and play2 == 'Paper':
         print('client 2 won') 
-        {{sen}} = 'client 2 won'
+        response = 'client 2 won'
     if play1 == 'Paper' and play2 == 'Rock':
         print ('client 1 won')
+        response = 'client 1 won'
     if play1 == 'Scissors' and play2 == 'Paper': 
         print ('client 1 won')
+        response = 'client 1 won'
     if play1  == 'Paper' and play2  == 'Scissors': 
         print ('client 2 won')
+        response = 'client 2 won'
     if play1  == 'Rock' and play2  == 'Scissors':
         print ('client 1 won')
+        response = 'client 1 won'
     if play1  == 'Scissors' and play2  == 'Rock':
         print('client 2 won')
+        response = 'client 2 won'
     if play1  == 'Scissors' and play2  == 'Scissors':
         print('tie')
+        response = 'Game was a tie'
     if play1  =='Rock' and play2  == 'Rock':
         print('tie')
+        response = 'Game was a tie'
     if play1  == 'Paper' and play2  == 'Paper': 
         print('tie')
-
+        response = 'Game was a tie'
         
-    return redirect(url_for("StartGame"))
+    return redirect(url_for("StartGame"),response= response)  
+    
 
 #===============================================================================
 

@@ -30,6 +30,8 @@ play1 = None
 play1_lock = Lock()
 play2 = None
 play2_lock = Lock()
+var=False
+var_lock = Lock()
 #===============================================================================
 
 app.debug = True #Change this to False for production
@@ -73,9 +75,9 @@ url = 'mongodb://{}:{}@{}/{}'.format(
 client = pymongo.MongoClient(os.environ["MONGO_HOST"])
 db = client[os.environ["MONGO_DBNAME"]]
 collection = db['scores'] #put the name of your collection in the quotes
-    
-    
-    
+
+
+
 def database():
     if session['user_data']['login'] != '':
         if not collection.find_one({session['user_data']['login']:{'$gt':-1}}) == None:
@@ -84,8 +86,8 @@ def database():
             collection.insert_one({session['user_data']['login']: 0})
             print('x')
             return 0
-        
-        
+
+
 
 
 
@@ -100,39 +102,24 @@ def background_thread2():
         socketio.emit('count_event2', count) #sends out the varible count to all of the cleints
         socketio.emit('count_event', count) #sends out the varible count to all of the cleints
 
-        
-        
+
+
          # if client 1 = 'Rock' and client 2 = 'Paper': print client 2 won
 
 
-
-        # if client 1 = 'Rock' and client 2 = 'Paper': print client 2 won
-
-        # if client 1 = 'Paper' and client 2 = 'Rock': print client 1 won
-        # if client 1 = 'Scissors' and client 2 = 'Paper': print client 1 won
-        # if client 1 = 'Paper' and client 2 = 'Scissors': print client 2 won
-        # if client 1 = 'Rock' and client 2 = 'Scissors': print client 1 won
-        # if client 1 = 'Scissors' and client 2 = 'Rock': print client 2 won
-        # if client 1 = 'Scissors' and client 2 = 'Scissors': print tie
-        # if client 1 = 'Rock' and client 2 = 'Rock': print tie
-        # if client 1 = 'Paper' and client 2 = 'Paper': print tie
-
-         
 
         #win=request.form["Rock"] win=request.form["Paper"] win=request.form["Scissors"]
 
 #===============================================================================
 
-
-
-       
+#this code littarly efects nothing feel free to delete but may need in future
 
 @socketio.on('connect')
 def test_connect():
     global usernum
     with usernum_lock:
         print(usernum)
-        if usernum >= 2:
+        if usernum <= 2:
             if session['user_data']['login'] == '':
                 yeet='yeet'
             else:
@@ -143,18 +130,6 @@ def test_connect():
                         socketio.to('room2').emit('connection2', 'connected')# this is the message that goes along with start in the JQuery code
                     usernum=usernum+1
                     print('function 2')
-        else:
-            if session['user_data']['login'] == '':
-                yeet='yeet'
-            else:
-                global thread1
-                with thread1_lock:
-                    if thread1 is None:
-                        thread1=socketio.start_background_task(target=background_thread1)
-                        socketio.to('room1').emit('connection1', 'connected')# this is the message that goes along with start in the JQuery code
-                        usernum=1
-                    usernum=usernum+1
-                    print('function 1')
 
 #===============================================================================
 
@@ -175,19 +150,17 @@ def home():
 #===============================================================================
 
 @app.route('/p3')
-def StartGame():
-    if session['user_data']['login'] != '':
-        if not collection.find_one({session['user_data']['login']:{'$gt':-1}}) == None:
-            collection.update({session['user_data']['login']: database()}, {'$set':{session['user_data']['login']: database() + 1}})
-        return render_template('StartGame.html', username = session['user_data']['login'], score = database())
-    else:
-        return render_template('StartGame.html')
+def StartGame(response=""):
+    if not collection.find_one({session['user_data']['login']:{'$gt':-1}}) == None:
+        collection.update({session['user_data']['login']: database()}, {'$set':{session['user_data']['login']: database() + 1}})
+    return render_template('StartGame.html', username = session['user_data']['login'], score = database(), sen = response)
+
 
 #===============================================================================
 
 @app.route('/button', methods=['POST'])
 def Button():
-   
+    global var
     if 'Rock' in request.form:
         print("rock")
 
@@ -197,45 +170,94 @@ def Button():
     if 'Scissors' in request.form:
         print("scissors")
 
-    global play1 
-    with play1_lock:
-        if play1 is None and 'Rock' in request.form:
-            play1= request.form['Rock']   
-            print("rock played")
-        if play1 is None and 'Paper' in request.form:
-            play1= request.form['Paper']   
-            print("paper played")
-        if play1 is None and 'Scissors' in request.form:
-            play1= request.form['Scissors']   
-            print("scissors played")
-        
-    global play2 
-    with play2_lock:
-        if play2 is None and 'Rock' in request.form:
-            play2= request.form['Rock']   
-            print("rock played2")
-        if play2 is None and 'Paper' in request.form:
-            play2= request.form['Paper']   
-            print("paper played")
-        if play2 is None and 'Scissors' in request.form:
-            play2= request.form['Scissors']   
+    with var_lock:
+        if var == False:
+            global play1
+            with play1_lock:
+                if play1 is None and 'Rock' in request.form:
+                    play1= request.form['Rock']
+                    print("rock played")
+                if play1 is None and 'Paper' in request.form:
+                    play1= request.form['Paper']
+                    print("paper played")
+                if play1 is None and 'Scissors' in request.form:
+                    play1= request.form['Scissors']
+                    print("scissors played")
+                var= True
+                print(var)
+        else:
+            global play2
+            with play2_lock:
+                if play2 is None and 'Rock' in request.form:
+                    play2= request.form['Rock']
+                    print("rock played2")
+                if play2 is None and 'Paper' in request.form:
+                    play2= request.form['Paper']
+                    print("paper played2")
+                if play2 is None and 'Scissors' in request.form:
+                    play2= request.form['Scissors']
+                    print("scissors played2")
 
-           #print("scissors played")     
 
-            print("scissors played")
-        
-         # if client 1 = 'Rock' and client 2 = 'Paper': print client 2 won
-        # if client 1 = 'Paper' and client 2 = 'Rock': print client 1 won
-        # if client 1 = 'Scissors' and client 2 = 'Paper': print client 1 won
-        # if client 1 = 'Paper' and client 2 = 'Scissors': print client 2 won
-        # if client 1 = 'Rock' and client 2 = 'Scissors': print client 1 won
-        # if client 1 = 'Scissors' and client 2 = 'Rock': print client 2 won
-        # if client 1 = 'Scissors' and client 2 = 'Scissors': print tie
-        # if client 1 = 'Rock' and client 2 = 'Rock': print tie
-        # if client 1 = 'Paper' and client 2 = 'Paper': print tie
 
-        
+    if play1 == 'Rock' and play2 == 'Paper':
+        print('client 2 won')
+        var=False
+        play1=None
+        play2=None # set {{sen}} == 'client 2 won'
+        usernum=0
+    if play1 == 'Paper' and play2 == 'Rock':
+        print ('client 1 won')
+        var=False
+        play1=None
+        play2=None
+        usernum=0
+    if play1 == 'Scissors' and play2 == 'Paper':
+        print ('client 1 won')
+        var=False
+        play1=None
+        play2=None
+        usernum=0
+    if play1  == 'Paper' and play2  == 'Scissors':
+        print ('client 2 won')
+        var=False
+        play1=None
+        play2=None
+        usernum=0
+    if play1  == 'Rock' and play2  == 'Scissors':
+        print ('client 1 won')
+        var=False
+        play1=None
+        play2=None
+        usernum=0
+    if play1  == 'Scissors' and play2  == 'Rock':
+        print('client 2 won')
+        var=False
+        play1=None
+        play2=None
+        usernum=0
+    if play1  == 'Scissors' and play2  == 'Scissors':
+        print('tie')
+        var=False
+        play1=None
+        play2=None
+        usernum=0
+    if play1  =='Rock' and play2  == 'Rock':
+        print('tie')
+        var=False
+        play1=None
+        play2=None
+        usernum=0
+    if play1  == 'Paper' and play2  == 'Paper':
+        print('tie')
+        var=False
+        play1=None
+        play2=None
+        usernum=0
+
+    print(var)
     return redirect(url_for("StartGame"))
+
 
 #===============================================================================
 

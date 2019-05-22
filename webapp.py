@@ -187,41 +187,7 @@ def Button():
         print("scissors")
 
         buttonpressed='True'
-    global play1 
-    with play1_lock:
-        if play1 is None and 'Rock' in request.form:
-            play1= request.form['Rock']   
-            print("rock played")
-        if play1 is None and 'Paper' in request.form:
-            play1= request.form['Paper']   
-            print("paper played")
-        if play1 is None and 'Scissors' in request.form:
-            play1= request.form['Scissors']   
-            print("scissors played")
-    global play2 
-    with play2_lock:
-        if play2 is None and 'Rock' in request.form:
-            play2= request.form['Rock']   
-            print("rock played2")
-        if play2 is None and 'Paper' in request.form:
-            play2= request.form['Paper']   
-            print("paper played")
-        if play2 is None and 'Scissors' in request.form:
-            play2= request.form['Scissors']   
-            print("scissors played")     
 
-            print("scissors played")
-        
-           
-         # if client 1 = 'Rock' and client 2 = 'Paper': print client 2 won
-        # if client 1 = 'Paper' and client 2 = 'Rock': print client 1 won
-        # if client 1 = 'Scissors' and client 2 = 'Paper': print client 1 won
-        # if client 1 = 'Paper' and client 2 = 'Scissors': print client 2 won
-        # if client 1 = 'Rock' and client 2 = 'Scissors': print client 1 won
-        # if client 1 = 'Scissors' and client 2 = 'Rock': print client 2 won
-        # if client 1 = 'Scissors' and client 2 = 'Scissors': print tie
-        # if client 1 = 'Rock' and client 2 = 'Rock': print tie
-        # if client 1 = 'Paper' and client 2 = 'Paper': print tie
 
     with var_lock:   
         if var == False:
@@ -255,7 +221,7 @@ def Button():
         
     if play1 == 'Rock' and play2 == 'Paper':
         print('client 2 won') 
-        {{sen}} = 'client 2 won'
+        #{{sen}} = 'client 2 won'
     if play1 == 'Paper' and play2 == 'Rock':
         print ('client 1 won')
     if play1 == 'Scissors' and play2 == 'Paper': 

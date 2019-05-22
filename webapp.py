@@ -75,9 +75,9 @@ url = 'mongodb://{}:{}@{}/{}'.format(
 client = pymongo.MongoClient(os.environ["MONGO_HOST"])
 db = client[os.environ["MONGO_DBNAME"]]
 collection = db['scores'] #put the name of your collection in the quotes
-    
-    
-    
+
+
+
 def database():
     if session['user_data']['login'] != '':
         if not collection.find_one({session['user_data']['login']:{'$gt':-1}}) == None:
@@ -86,8 +86,8 @@ def database():
             collection.insert_one({session['user_data']['login']: 0})
             print('x')
             return 0
-        
-        
+
+
 
 
 
@@ -102,8 +102,8 @@ def background_thread2():
         socketio.emit('count_event2', count) #sends out the varible count to all of the cleints
         socketio.emit('count_event', count) #sends out the varible count to all of the cleints
 
-        
-        
+
+
          # if client 1 = 'Rock' and client 2 = 'Paper': print client 2 won
 
 
@@ -112,16 +112,14 @@ def background_thread2():
 
 #===============================================================================
 
-
-
-       
+#this code littarly efects nothing feel free to delete but may need in future
 
 @socketio.on('connect')
 def test_connect():
     global usernum
     with usernum_lock:
         print(usernum)
-        if usernum >= 2:
+        if usernum <= 2:
             if session['user_data']['login'] == '':
                 yeet='yeet'
             else:
@@ -132,18 +130,6 @@ def test_connect():
                         socketio.to('room2').emit('connection2', 'connected')# this is the message that goes along with start in the JQuery code
                     usernum=usernum+1
                     print('function 2')
-        else:
-            if session['user_data']['login'] == '':
-                yeet='yeet'
-            else:
-                global thread1
-                with thread1_lock:
-                    if thread1 is None:
-                        thread1=socketio.start_background_task(target=background_thread1)
-                        socketio.to('room1').emit('connection1', 'connected')# this is the message that goes along with start in the JQuery code
-                        usernum=1
-                    usernum=usernum+1
-                    print('function 1')
 
 #===============================================================================
 
@@ -182,34 +168,37 @@ def Button():
 
     if 'Scissors' in request.form:
         print("scissors")
-    with var_lock:   
+    with var_lock:
         if var == False:
-            global play1 
+            global play1
             with play1_lock:
                 if play1 is None and 'Rock' in request.form:
-                    play1= request.form['Rock']   
+                    play1= request.form['Rock']
                     print("rock played")
                 if play1 is None and 'Paper' in request.form:
-                    play1= request.form['Paper']   
+                    play1= request.form['Paper']
                     print("paper played")
                 if play1 is None and 'Scissors' in request.form:
-                    play1= request.form['Scissors']   
+                    play1= request.form['Scissors']
                     print("scissors played")
                 var= True
                 print(var)
-        else:     
-            global play2 
+        else:
+            global play2
             with play2_lock:
                 if play2 is None and 'Rock' in request.form:
-                    play2= request.form['Rock']   
+                    play2= request.form['Rock']
                     print("rock played2")
                 if play2 is None and 'Paper' in request.form:
-                    play2= request.form['Paper']   
+                    play2= request.form['Paper']
                     print("paper played2")
                 if play2 is None and 'Scissors' in request.form:
-                    play2= request.form['Scissors']   
-                    print("scissors played2")     
+                    play2= request.form['Scissors']
+                    print("scissors played2")
 
+
+
+<<<<<<< HEAD
             
     response=""    
     if play1 == 'Rock' and play2 == 'Paper':
@@ -242,6 +231,65 @@ def Button():
         
     return redirect(url_for("StartGame"),response= response)  
     
+=======
+    if play1 == 'Rock' and play2 == 'Paper':
+        print('client 2 won')
+        var=False
+        play1=None
+        play2=None # set {{sen}} == 'client 2 won'
+        usernum=0
+    if play1 == 'Paper' and play2 == 'Rock':
+        print ('client 1 won')
+        var=False
+        play1=None
+        play2=None
+        usernum=0
+    if play1 == 'Scissors' and play2 == 'Paper':
+        print ('client 1 won')
+        var=False
+        play1=None
+        play2=None
+        usernum=0
+    if play1  == 'Paper' and play2  == 'Scissors':
+        print ('client 2 won')
+        var=False
+        play1=None
+        play2=None
+        usernum=0
+    if play1  == 'Rock' and play2  == 'Scissors':
+        print ('client 1 won')
+        var=False
+        play1=None
+        play2=None
+        usernum=0
+    if play1  == 'Scissors' and play2  == 'Rock':
+        print('client 2 won')
+        var=False
+        play1=None
+        play2=None
+        usernum=0
+    if play1  == 'Scissors' and play2  == 'Scissors':
+        print('tie')
+        var=False
+        play1=None
+        play2=None
+        usernum=0
+    if play1  =='Rock' and play2  == 'Rock':
+        print('tie')
+        var=False
+        play1=None
+        play2=None
+        usernum=0
+    if play1  == 'Paper' and play2  == 'Paper':
+        print('tie')
+        var=False
+        play1=None
+        play2=None
+        usernum=0
+
+    print(var)
+    return redirect(url_for("StartGame"))
+>>>>>>> 9d08ed07d59b10344b0430580bd473d9b00ec566
 
 #===============================================================================
 

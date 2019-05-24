@@ -266,7 +266,12 @@ def Info():
     x2 = 0
     x3 = 0
     x4 = 0
+    x5 = 0
     i2 = ""
+    i3 = ""
+    i4 = ""
+    y = 0
+    z = ""
     for i in collection.find():
         for x in i:
             if x2 == 0:
@@ -282,7 +287,45 @@ def Info():
                         x3 = i[x]
                         i2 = x
             x2 = 1
-    return render_template('Info.html', username1 = i2, username2 = session['user_data']['login'], username3 = session['user_data']['login'], score1 = x3, score2 = database(), score3 = database())
+    x2 = 0
+    for i in collection.find():
+        for x in i:
+            if x2 == 0:
+                if not x == "_id":
+                    print(i[x])
+                    y = i[x]
+                    z = x
+            else:
+                if not x == "_id":
+                    print(x)
+                    print(i[x])
+                    if not i2 == x and i[x] <= x3 and i[x] > x4:
+                        x4 = i[x]
+                        i3 = x
+                    if not z == x and y <= x3 and y > x4:
+                        x4 = y
+                        i3 = z
+            x2 = 1
+    x2 = 0
+    for i in collection.find():
+        for x in i:
+            if x2 == 0:
+                if not x == "_id":
+                    print(i[x])
+                    y = i[x]
+                    z = x
+            else:
+                if not x == "_id":
+                    print(x)
+                    print(i[x])
+                    if not i2 == x and not i3 == x and i[x] <= x4 and i[x] > x5:
+                        x5 = i[x]
+                        i4 = x
+                    if not z == x and y <= x4 and y > x5:
+                        x5 = y
+                        i4 = z
+            x2 = 1
+    return render_template('Info.html', username1 = i2, username2 = i3, username3 = i4, score1 = x3, score2 = x4, score3 = x5)
 
 #===============================================================================
 

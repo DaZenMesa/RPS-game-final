@@ -219,14 +219,10 @@ def Button():
 
     session["response"]=' '
     if play1 == 'Rock' and play2 == 'Paper':
-
-        print('client 2 won')
-        #{{sen}} = 'client 2 won'
-
         print('client 2 won')
         var=False
         play1=None
-        play2=None # set {{sen}} == 'client 2 won'
+        play2=None
         usernum=0
         session["response"]=cleint2 +' won'
         cleint1=None
@@ -249,7 +245,6 @@ def Button():
         session["response"]=cleint1 + ' won'
         cleint1=None
         cleint2=None
-
     if play1  == 'Paper' and play2  == 'Scissors':
         print ('client 2 won')
         var=False
@@ -258,7 +253,7 @@ def Button():
         usernum=0
         cleint1=None
         cleint2=None
-        session["response"]='client 2 won'
+        session["response"]=client2 +  'won'
     if play1  == 'Rock' and play2  == 'Scissors':
         print ('client 1 won')
         var=False
@@ -267,7 +262,7 @@ def Button():
         usernum=0
         cleint1=None
         cleint2=None
-        session["response"]='client 1 won'
+        session["response"]=client1 + 'won'
     if play1  == 'Scissors' and play2  == 'Rock':
         print('client 2 won')
         var=False
@@ -276,7 +271,7 @@ def Button():
         usernum=0
         cleint1=None
         cleint2=None
-        session["response"]='The game was a tie'
+        session["response"]==client2 + 'won'
     if play1  == 'Scissors' and play2  == 'Scissors':
         print('tie')
         var=False
@@ -302,10 +297,8 @@ def Button():
         play2=None
         usernum=0
         cleint1=None
-        cleint2=None
-        
+        cleint2=None  
         session["response"]='The game was a tie'
-        print('hi')
     print(var)
     return redirect(url_for("StartGame"))
 

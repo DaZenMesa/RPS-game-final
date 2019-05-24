@@ -6,23 +6,27 @@ body {
   margin-right: 50px;
   margin-left: 50px;
   margin-bottom: 50px;
+
   color: #007D32;
-  background-color: #849fcc;
+  background-color: #cqccce;
+
  
 }
 #paper {
   margin-right: 50px;
   margin-left: 50px;
   margin-bottom: 50px;
-  color: EFFF06;
-  background-color: #849fcc;
+  color:#8779ea;
+  background-color: #cqccce;
 }
 #scissors {
   margin-right: 50px;
   margin-left: 50px;
   margin-bottom: 50px;
+  background-color: #000000;
   color: #33CCCC;
-  background-color: #849fcc;
+  background-color: #cqccce;
+
 }
 
 

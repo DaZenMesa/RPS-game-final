@@ -297,16 +297,15 @@ def Button():
         session["response"]='The game was a tie'
     if play1  == 'Paper' and play2  == 'Paper':
         print('tie')
-
-
-
         var=False
         play1=None
         play2=None
         usernum=0
         cleint1=None
         cleint2=None
+        
         session["response"]='The game was a tie'
+        print('hi')
     print(var)
     return redirect(url_for("StartGame"))
 

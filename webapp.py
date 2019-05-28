@@ -157,8 +157,8 @@ def StartGame(response=""):
     if 'user_data' not in session:
         return render_template('StartGame.html')
     else:
-        if not collection.find_one({session['user_data']['login']:{'$gt':-1}}) == None:
-            collection.update({session['user_data']['login']: database()}, {'$set':{session['user_data']['login']: database() + 1}})
+        #if not collection.find_one({session['user_data']['login']:{'$gt':-1}}) == None:
+            #collection.update({session['user_data']['login']: database()}, {'$set':{session['user_data']['login']: database() + 1}})
         if "response" in session:
             temp= session["response"]
             session["response"]=' '
@@ -308,33 +308,33 @@ def Button():
         play1=None
         play2=None
         usernum=0
+        session["response"]='The game was a tie'
         collection.update({client2: database()}, {'$set':{client2: database() + 2}})
         collection.update({client1: database()}, {'$set':{client1: database() + 2}})
         client1=None
         client2=None
-        session["response"]='The game was a tie'
     if play1  =='Rock' and play2  == 'Rock':
         print('tie')
         var=False
         play1=None
         play2=None
         usernum=0
+        session["response"]='The game was a tie'
         collection.update({client2: database()}, {'$set':{client2: database() + 2}})
         collection.update({client1: database()}, {'$set':{client1: database() + 2}})
         client1=None
         client2=None
-        session["response"]='The game was a tie'
     if play1  == 'Paper' and play2  == 'Paper':
         print('tie')
         var=False
         play1=None
         play2=None
         usernum=0
+        session["response"]='The game was a tie'
         collection.update({client2: database()}, {'$set':{client2: database() + 2}})
         collection.update({client1: database()}, {'$set':{client1: database() + 2}})
         client1=None
-        client2=None  
-        session["response"]='The game was a tie'
+        client2=None
     print(var)
     return redirect(url_for("StartGame"))
 

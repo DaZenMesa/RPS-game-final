@@ -33,8 +33,8 @@ play2_lock = Lock()
 var=False
 var_lock = Lock()
 
-cleint1=None
-cleint2=None
+client1=None
+client2=None
 #===============================================================================
 
 app.debug = True #Change this to False for production
@@ -169,8 +169,8 @@ def StartGame(response=""):
 
 @app.route('/button', methods=['POST'])
 def Button():
-    global cleint1
-    global cleint2
+    global client1
+    global client2
     global var
 
     if 'Rock' in request.form:
@@ -191,7 +191,7 @@ def Button():
         if var == False:
             global play1
             with play1_lock:
-                cleint1=session['user_data']['login']
+                client1=session['user_data']['login']
                 if play1 is None and 'Rock' in request.form:
                     play1= request.form['Rock']
                     print("rock played")
@@ -206,7 +206,7 @@ def Button():
         else:
             global play2
             with play2_lock:
-                cleint2=session['user_data']['login']
+                client2=session['user_data']['login']
                 if play2 is None and 'Rock' in request.form:
                     play2= request.form['Rock']
                     print("rock played2")
@@ -219,72 +219,67 @@ def Button():
 
     session["response"]=' '
     if play1 == 'Rock' and play2 == 'Paper':
-
-        print('client 2 won')
-        #{{sen}} = 'client 2 won'
-
         print('client 2 won')
         var=False
         play1=None
-        play2=None # set {{sen}} == 'client 2 won'
+        play2=None
         usernum=0
-        session["response"]=cleint2 +' won'
-        cleint1=None
-        cleint2=None
+        session["response"]=client2 +' won'
+        client1=None
+        client2=None
     if play1 == 'Paper' and play2 == 'Rock':
         print ('client 1 won')
         var=False
         play1=None
         play2=None
         usernum=0
-        session["response"]= cleint1 + ' won'
-        cleint1=None
-        cleint2=None
+        session["response"]= client1 + ' won'
+        client1=None
+        client2=None
     if play1 == 'Scissors' and play2 == 'Paper':
         print ('client 1 won')
         var=False
         play1=None
         play2=None
         usernum=0
-        session["response"]=cleint1 + ' won'
-        cleint1=None
-        cleint2=None
-
+        session["response"]=client1 + ' won'
+        client1=None
+        client2=None
     if play1  == 'Paper' and play2  == 'Scissors':
         print ('client 2 won')
         var=False
         play1=None
         play2=None
         usernum=0
-        cleint1=None
-        cleint2=None
-        session["response"]='client 2 won'
+        client1=None
+        client2=None
+        session["response"]=client2 +  'won'
     if play1  == 'Rock' and play2  == 'Scissors':
         print ('client 1 won')
         var=False
         play1=None
         play2=None
         usernum=0
-        cleint1=None
-        cleint2=None
-        session["response"]='client 1 won'
+        client1=None
+        client2=None
+        session["response"]=client1 + 'won'
     if play1  == 'Scissors' and play2  == 'Rock':
         print('client 2 won')
         var=False
         play1=None
         play2=None
         usernum=0
-        cleint1=None
-        cleint2=None
-        session["response"]='The game was a tie'
+        client1=None
+        client2=None
+        session["response"]==client2 + 'won'
     if play1  == 'Scissors' and play2  == 'Scissors':
         print('tie')
         var=False
         play1=None
         play2=None
         usernum=0
-        cleint1=None
-        cleint2=None
+        client1=None
+        client2=None
         session["response"]='The game was a tie'
     if play1  =='Rock' and play2  == 'Rock':
         print('tie')
@@ -292,8 +287,8 @@ def Button():
         play1=None
         play2=None
         usernum=0
-        cleint1=None
-        cleint2=None
+        client1=None
+        client2=None
         session["response"]='The game was a tie'
     if play1  == 'Paper' and play2  == 'Paper':
         print('tie')
@@ -301,11 +296,9 @@ def Button():
         play1=None
         play2=None
         usernum=0
-        cleint1=None
-        cleint2=None
-        
+        client1=None
+        client2=None  
         session["response"]='The game was a tie'
-        print('hi')
     print(var)
     return redirect(url_for("StartGame"))
 

@@ -9,6 +9,7 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function() {
+		showbuttons = true
             namespace = '/';
             // Connect to the Socket.IO server.
             // The connection URL has the following format:
@@ -22,6 +23,8 @@
             //count event
             socket.on('count_event1', function(msg){
                 $('#log1').append('<br>'+msg);
+				if showbuttons == false 
+				$(".dissapear").hide();
 
             });
             socket.on('connection2', function(msg){
@@ -31,8 +34,11 @@
             //count event
             socket.on('count_event2', function(msg){
                 $('#log2').append('<br>'+msg);
+				if showbuttons == false 
+					$(".dissapear").hide();
             });
 			$(".dissapear").click(function(){
+			showbuttons = false
 	    $(".dissapear").hide();
       });
         });

@@ -20,11 +20,9 @@ import sys
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode=None)
 usernum=0
-thread1 = None
+thread = None
 usernum_lock=Lock()
-thread1_lock = Lock()
-thread2 = None
-thread2_lock = Lock()
+thread_lock = Lock()
 
 play1 = None
 play1_lock = Lock()
@@ -58,12 +56,7 @@ github = oauth.remote_app(
 
 #===============================================================================
 
-def background_thread1():
-    count=0
-    while True:
-        socketio.sleep(5) #wait 5 seconds
-        count=count+1
-        socketio.emit('count_event1', count) #sends out the varible count to all of the cleints
+
 
 #===============================================================================
 
@@ -95,23 +88,12 @@ def database():
 
 
 
-def background_thread2():
-
+def background_thread():
     count=0
     while True:
         socketio.sleep(5) #wait 5 seconds
         count=count+1
-        #collection.update({session['user_data']['login']: database()}, {'$set':{session['user_data']['login']: database() + count}})
-        socketio.emit('count_event2', count) #sends out the varible count to all of the cleints
         socketio.emit('count_event', count) #sends out the varible count to all of the cleints
-
-
-
-         # if client 1 = 'Rock' and client 2 = 'Paper': print client 2 won
-
-
-
-        #win=request.form["Rock"] win=request.form["Paper"] win=request.form["Scissors"]
 
 #===============================================================================
 
@@ -119,20 +101,13 @@ def background_thread2():
 
 @socketio.on('connect')
 def test_connect():
-    global usernum
-    with usernum_lock:
-        print(usernum)
-        if usernum <= 2:
-            if session['user_data']['login'] == '':
-                yeet='yeet'
-            else:
-                global thread2 #this is a global varible which is the same across all cleints
-                with thread2_lock: #locks the global varible so only one client can use it at a time
-                    if thread2 is None:
-                        thread2=socketio.start_background_task(target=background_thread2)
-                        socketio.to('room2').emit('connection2', 'connected')# this is the message that goes along with start in the JQuery code
-                    usernum=usernum+1
-                    print('function 2')
+    global thread #this is a global varible which is the same across all cleints
+    print('here')
+    with thread_lock: #locks the global varible so only one client can use it at a time
+        if thread is None:
+            thread=socketio.start_background_task(target=background_thread)
+
+    emit('start', 'connected')# this is the message that goes along with start in the JQuery code
 
 #===============================================================================
 
@@ -466,5 +441,4 @@ def get_github_oauth_token():
 #===============================================================================
 
 if __name__ == '__main__':
-    os.system("echo json(array) > file")
     app.run()

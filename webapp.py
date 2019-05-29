@@ -20,11 +20,9 @@ import sys
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode=None)
 usernum=0
-thread1 = None
+thread = None
 usernum_lock=Lock()
-thread1_lock = Lock()
-thread2 = None
-thread2_lock = Lock()
+thread_lock = Lock()
 
 play1 = None
 play1_lock = Lock()
@@ -58,12 +56,7 @@ github = oauth.remote_app(
 
 #===============================================================================
 
-def background_thread1():
-    count=0
-    while True:
-        socketio.sleep(5) #wait 5 seconds
-        count=count+1
-        socketio.emit('count_event1', count) #sends out the varible count to all of the cleints
+
 
 #===============================================================================
 
@@ -95,23 +88,12 @@ def database():
 
 
 
-def background_thread2():
-
+def background_thread():
     count=0
     while True:
         socketio.sleep(5) #wait 5 seconds
         count=count+1
-        #collection.update({session['user_data']['login']: database()}, {'$set':{session['user_data']['login']: database() + count}})
-        socketio.emit('count_event2', count) #sends out the varible count to all of the cleints
         socketio.emit('count_event', count) #sends out the varible count to all of the cleints
-
-
-
-         # if client 1 = 'Rock' and client 2 = 'Paper': print client 2 won
-
-
-
-        #win=request.form["Rock"] win=request.form["Paper"] win=request.form["Scissors"]
 
 #===============================================================================
 
@@ -119,20 +101,13 @@ def background_thread2():
 
 @socketio.on('connect')
 def test_connect():
-    global usernum
-    with usernum_lock:
-        print(usernum)
-        if usernum <= 2:
-            if session['user_data']['login'] == '':
-                yeet='yeet'
-            else:
-                global thread2 #this is a global varible which is the same across all cleints
-                with thread2_lock: #locks the global varible so only one client can use it at a time
-                    if thread2 is None:
-                        thread2=socketio.start_background_task(target=background_thread2)
-                        socketio.to('room2').emit('connection2', 'connected')# this is the message that goes along with start in the JQuery code
-                    usernum=usernum+1
-                    print('function 2')
+    global thread #this is a global varible which is the same across all cleints
+    print('here')
+    with thread_lock: #locks the global varible so only one client can use it at a time
+        if thread is None:
+            thread=socketio.start_background_task(target=background_thread)
+
+    emit('start', 'connected')# this is the message that goes along with start in the JQuery code
 
 #===============================================================================
 
@@ -172,6 +147,7 @@ def Button():
     global client1
     global client2
     global var
+    global test
 
     if 'Rock' in request.form:
         print("rock")
@@ -183,7 +159,7 @@ def Button():
         print("scissors")
 
 
-
+    test = False 
 
 
     with var_lock:
@@ -202,6 +178,7 @@ def Button():
                     play1= request.form['Scissors']
                     print("scissors played")
                 var= True
+                test= True
                 print(var)
         else:
             global play2
@@ -216,7 +193,8 @@ def Button():
                 if play2 is None and 'Scissors' in request.form:
                     play2= request.form['Scissors']
                     print("scissors played2")
-
+                    test = True
+                    
     session["response"]=' '
     if play1 == 'Rock' and play2 == 'Paper':
         print('client 2 won')
@@ -232,6 +210,7 @@ def Button():
             collection.update({client1: database()}, {'$set':{client1: 0}})
         client1=None
         client2=None
+        test = False
     if play1 == 'Paper' and play2 == 'Rock':
         print ('client 1 won')
         var=False
@@ -246,6 +225,7 @@ def Button():
             collection.update({client2: database()}, {'$set':{client2: 0}})
         client1=None
         client2=None
+        test = False
     if play1 == 'Scissors' and play2 == 'Paper':
         print ('client 1 won')
         var=False
@@ -260,6 +240,7 @@ def Button():
             collection.update({client2: database()}, {'$set':{client2: 0}})
         client1=None
         client2=None
+        test = False
     if play1  == 'Paper' and play2  == 'Scissors':
         print ('client 2 won')
         var=False
@@ -274,6 +255,7 @@ def Button():
             collection.update({client1: database()}, {'$set':{client1: 0}})
         client1=None
         client2=None
+        test = False
     if play1  == 'Rock' and play2  == 'Scissors':
         print ('client 1 won')
         var=False
@@ -288,6 +270,7 @@ def Button():
             collection.update({client2: database()}, {'$set':{client2: 0}})
         client1=None
         client2=None
+        test = False
     if play1  == 'Scissors' and play2  == 'Rock':
         print('client 2 won')
         var=False
@@ -302,6 +285,7 @@ def Button():
             collection.update({client1: database()}, {'$set':{client1: 0}})
         client1=None
         client2=None
+        test = False
     if play1  == 'Scissors' and play2  == 'Scissors':
         print('tie')
         var=False
@@ -313,6 +297,7 @@ def Button():
         collection.update({client1: database()}, {'$set':{client1: database() + 2}})
         client1=None
         client2=None
+        test = False
     if play1  =='Rock' and play2  == 'Rock':
         print('tie')
         var=False
@@ -324,17 +309,21 @@ def Button():
         collection.update({client1: database()}, {'$set':{client1: database() + 2}})
         client1=None
         client2=None
+        test = False
     if play1  == 'Paper' and play2  == 'Paper':
         print('tie')
         var=False
         play1=None
         play2=None
         usernum=0
+        client1=None
+        client2=None  
         session["response"]='The game was a tie'
         collection.update({client2: database()}, {'$set':{client2: database() + 2}})
         collection.update({client1: database()}, {'$set':{client1: database() + 2}})
         client1=None
         client2=None
+        test = False
     print(var)
     return redirect(url_for("StartGame"))
 
@@ -414,7 +403,7 @@ def Info():
 
 @app.route('/login')
 def login():
-    return github.authorize(callback=url_for('authorized', _external=True, _scheme='http')) #callback URL must match the pre-configured callback URL
+    return github.authorize(callback=url_for('authorized', _external=True, _scheme='https')) #callback URL must match the pre-configured callback URL
 
 #===============================================================================
 
@@ -452,5 +441,4 @@ def get_github_oauth_token():
 #===============================================================================
 
 if __name__ == '__main__':
-    os.system("echo json(array) > file")
     app.run()

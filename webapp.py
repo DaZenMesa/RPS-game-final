@@ -316,8 +316,6 @@ def Button():
         play1=None
         play2=None
         usernum=0
-        client1=None
-        client2=None  
         session["response"]='The game was a tie'
         collection.update({client2: database()}, {'$set':{client2: database() + 2}})
         collection.update({client1: database()}, {'$set':{client1: database() + 2}})
@@ -403,7 +401,7 @@ def Info():
 
 @app.route('/login')
 def login():
-    return github.authorize(callback=url_for('authorized', _external=True, _scheme='https')) #callback URL must match the pre-configured callback URL
+    return github.authorize(callback=url_for('authorized', _external=True, _scheme='http')) #callback URL must match the pre-configured callback URL
 
 #===============================================================================
 

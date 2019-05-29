@@ -51,7 +51,7 @@
 
 
 
-    <p> {{username}} score = {{score}} </p>
+    <!-- <p> {{username}} score = {{score}} </p> -->
     
     <h1>Flask-SocketIO Demo</h1>
 
@@ -59,8 +59,9 @@
 
     <h2>Receive:</h2>
    
-	<p> {{sen}} </p>
-
+	{% if logged_in%}
+    
+  
     <form  method="post" class="dissapear" action='/button'>
     <input type="submit" name="Rock" value= 'Rock' id='rock'>
     </form>
@@ -74,9 +75,10 @@
     <input type="submit" name="Scissors"  value= 'Scissors'  id='scissors'>
     </form>
 
+    <p> {{sen}} </p>
    
     
-
+    {%endif%}
 
 
 {% endblock %}

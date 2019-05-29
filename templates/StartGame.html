@@ -4,62 +4,53 @@
 
 {% block content %}
 
-    
-    <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
-    <script type="text/javascript" charset="utf-8">
-        $(document).ready(function() {
-		showbuttons = true
-            namespace = '/';
-            // Connect to the Socket.IO server.
-            // The connection URL has the following format:
-            //     http[s]://<domain>:<port>[/<namespace>]
-            var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
-            //Evnt handler for connecting
-            socket.on('connection1', function(msg){
-                socket.join('room1');
-                $('#connection1').text(msg);
-              });
-            //count event
-            socket.on('count_event1', function(msg){
-                $('#log1').append('<br>'+msg);
-				if showbuttons == false 
-				$(".dissapear").hide();
 
-            });
-            socket.on('connection2', function(msg){
-                socket.join('room2');
-                $('#connection2').text(msg);
-              });
-            //count event
-            socket.on('count_event2', function(msg){
-                $('#log2').append('<br>'+msg);
-				if showbuttons == false 
-					$(".dissapear").hide();
-            });
-			$(".dissapear").click(function(){
-			showbuttons = false
-	    $(".dissapear").hide();
-      });
+<script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        namespace = '/';
+        // Connect to the Socket.IO server.
+        // The connection URL has the following format:
+        //     http[s]://<domain>:<port>[/<namespace>]
+        var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
+        //Evnt handler for connecting
+        socket.on('start',function(msg){
+            $('#start').text(msg);
         });
-		
+        //count event
+        socket.on('count_event', function(msg){
+            $('#log').append('<br>'+msg);
+        });
+    });;
+	//			if showbuttons == false
+	//				$(".dissapear").hide();
+  //          });
+	//		$(".dissapear").click(function(){
+	//		showbuttons = false
+	//    $(".dissapear").hide();
+  //    });
+  //      });
+
     </script>
-	
-	    
+
+
 
 
 
     <p> {{username}} score = {{score}} </p>
-    
+
     <h1>Flask-SocketIO Demo</h1>
 
 	  <p id="start"></p>
 
     <h2>Receive:</h2>
-   
+    <div id="log"></div>
+
+
 	{% if logged_in%}
-    
-  
+
+
     <form  method="post" class="dissapear" action='/button'>
     <input type="submit" name="Rock" value= 'Rock' id='rock'>
     </form>
@@ -74,8 +65,8 @@
     </form>
 
     <p> {{sen}} </p>
-   
-    
+
+
     {%endif%}
 
 

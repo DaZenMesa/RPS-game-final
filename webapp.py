@@ -169,7 +169,6 @@ def Button():
         client2=None
         test = 'false'
     if play1 == 'Paper' and play2 == 'Rock':
-        print ('client 1 won')
         var=False
         play1=None
         play2=None
@@ -184,7 +183,6 @@ def Button():
         client2=None
         test = 'false'
     if play1 == 'Scissors' and play2 == 'Paper':
-        print ('client 1 won')
         var=False
         play1=None
         play2=None
@@ -199,7 +197,6 @@ def Button():
         client2=None
         test = 'false'
     if play1  == 'Paper' and play2  == 'Scissors':
-        print ('client 2 won')
         var=False
         play1=None
         play2=None
@@ -214,7 +211,6 @@ def Button():
         client2=None
         test = 'false'
     if play1  == 'Rock' and play2  == 'Scissors':
-        print ('client 1 won')
         var=False
         play1=None
         play2=None
@@ -229,7 +225,6 @@ def Button():
         client2=None
         test = 'false'
     if play1  == 'Scissors' and play2  == 'Rock':
-        print('client 2 won')
         var=False
         play1=None
         play2=None
@@ -244,7 +239,6 @@ def Button():
         client2=None
         test = 'false'
     if play1  == 'Scissors' and play2  == 'Scissors':
-        print('tie')
         var=False
         play1=None
         play2=None
@@ -256,7 +250,6 @@ def Button():
         client2=None
         test = 'false'
     if play1  =='Rock' and play2  == 'Rock':
-        print('tie')
         var=False
         play1=None
         play2=None
@@ -268,7 +261,6 @@ def Button():
         client2=None
         test = 'false'
     if play1  == 'Paper' and play2  == 'Paper':
-        print('tie')
         var=False
         play1=None
         play2=None
@@ -279,7 +271,7 @@ def Button():
         client1=None
         client2=None
         test = 'false'
-    print(var)
+  
     return redirect(url_for("StartGame"))
 
 #===============================================================================

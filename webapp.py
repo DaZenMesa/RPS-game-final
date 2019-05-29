@@ -280,11 +280,7 @@ def Button():
             collection.update({client1: database()}, {'$set':{client1: 0}})
         client1=None
         client2=None
-<<<<<<< HEAD
         test = False
-        session["response"]=client2 +  'won'
-=======
->>>>>>> ef6ce9212fad5d038912025f97ab82250f2b02b8
     if play1  == 'Rock' and play2  == 'Scissors':
         print ('client 1 won')
         var=False
@@ -299,11 +295,7 @@ def Button():
             collection.update({client2: database()}, {'$set':{client2: 0}})
         client1=None
         client2=None
-<<<<<<< HEAD
         test = False
-        session["response"]=client1 + 'won'
-=======
->>>>>>> ef6ce9212fad5d038912025f97ab82250f2b02b8
     if play1  == 'Scissors' and play2  == 'Rock':
         print('client 2 won')
         var=False
@@ -318,11 +310,7 @@ def Button():
             collection.update({client1: database()}, {'$set':{client1: 0}})
         client1=None
         client2=None
-<<<<<<< HEAD
         test = False
-        session["response"]==client2 + 'won'
-=======
->>>>>>> ef6ce9212fad5d038912025f97ab82250f2b02b8
     if play1  == 'Scissors' and play2  == 'Scissors':
         print('tie')
         var=False
@@ -334,11 +322,7 @@ def Button():
         collection.update({client1: database()}, {'$set':{client1: database() + 2}})
         client1=None
         client2=None
-<<<<<<< HEAD
         test = False
-        session["response"]='The game was a tie'
-=======
->>>>>>> ef6ce9212fad5d038912025f97ab82250f2b02b8
     if play1  =='Rock' and play2  == 'Rock':
         print('tie')
         var=False
@@ -350,28 +334,21 @@ def Button():
         collection.update({client1: database()}, {'$set':{client1: database() + 2}})
         client1=None
         client2=None
-<<<<<<< HEAD
         test = False
-        session["response"]='The game was a tie'
-=======
->>>>>>> ef6ce9212fad5d038912025f97ab82250f2b02b8
     if play1  == 'Paper' and play2  == 'Paper':
         print('tie')
         var=False
         play1=None
         play2=None
         usernum=0
-<<<<<<< HEAD
         client1=None
         client2=None  
-        test = False
-=======
->>>>>>> ef6ce9212fad5d038912025f97ab82250f2b02b8
         session["response"]='The game was a tie'
         collection.update({client2: database()}, {'$set':{client2: database() + 2}})
         collection.update({client1: database()}, {'$set':{client1: database() + 2}})
         client1=None
         client2=None
+        test = False
     print(var)
     return redirect(url_for("StartGame"))
 

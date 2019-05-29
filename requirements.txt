@@ -10,4 +10,3 @@ Flask-OAuthlib
 bson
 pymongo
 dnspython
-sys

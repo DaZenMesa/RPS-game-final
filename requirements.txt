@@ -8,3 +8,6 @@ gunicorn
 flask_socketio
 Flask-OAuthlib
 bson
+pymongo
+dnspython
+sys

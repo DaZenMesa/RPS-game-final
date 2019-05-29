@@ -132,8 +132,8 @@ def StartGame(response=""):
     if 'user_data' not in session:
         return render_template('StartGame.html')
     else:
-        if not collection.find_one({session['user_data']['login']:{'$gt':-1}}) == None:
-            collection.update({session['user_data']['login']: database()}, {'$set':{session['user_data']['login']: database() + 1}})
+        #if not collection.find_one({session['user_data']['login']:{'$gt':-1}}) == None:
+            #collection.update({session['user_data']['login']: database()}, {'$set':{session['user_data']['login']: database() + 1}})
         if "response" in session:
             temp= session["response"]
             session["response"]=' '
@@ -200,6 +200,11 @@ def Button():
         play2=None
         usernum=0
         session["response"]=client2 +' won'
+        collection.update({client2: database()}, {'$set':{client2: database() + 10}})
+        if collection.find_one({client1:{'$gt':-1}})[client1] >= 5:
+            collection.update({client1: database()}, {'$set':{client1: database() - 5}})
+        else:
+            collection.update({client1: database()}, {'$set':{client1: 0}})
         client1=None
         client2=None
     if play1 == 'Paper' and play2 == 'Rock':
@@ -209,6 +214,11 @@ def Button():
         play2=None
         usernum=0
         session["response"]= client1 + ' won'
+        collection.update({client1: database()}, {'$set':{client1: database() + 10}})
+        if collection.find_one({client2:{'$gt':-1}})[client2] >= 5:
+            collection.update({client2: database()}, {'$set':{client2: database() - 5}})
+        else:
+            collection.update({client2: database()}, {'$set':{client2: 0}})
         client1=None
         client2=None
     if play1 == 'Scissors' and play2 == 'Paper':
@@ -218,6 +228,11 @@ def Button():
         play2=None
         usernum=0
         session["response"]=client1 + ' won'
+        collection.update({client1: database()}, {'$set':{client1: database() + 10}})
+        if collection.find_one({client2:{'$gt':-1}})[client2] >= 5:
+            collection.update({client2: database()}, {'$set':{client2: database() - 5}})
+        else:
+            collection.update({client2: database()}, {'$set':{client2: 0}})
         client1=None
         client2=None
     if play1  == 'Paper' and play2  == 'Scissors':
@@ -227,6 +242,11 @@ def Button():
         play2=None
         usernum=0
         session["response"]=client2 +  'won'
+        collection.update({client2: database()}, {'$set':{client2: database() + 10}})
+        if collection.find_one({client1:{'$gt':-1}})[client1] >= 5:
+            collection.update({client1: database()}, {'$set':{client1: database() - 5}})
+        else:
+            collection.update({client1: database()}, {'$set':{client1: 0}})
         client1=None
         client2=None
     if play1  == 'Rock' and play2  == 'Scissors':
@@ -236,6 +256,11 @@ def Button():
         play2=None
         usernum=0
         session["response"]=client1 + 'won'
+        collection.update({client1: database()}, {'$set':{client1: database() + 10}})
+        if collection.find_one({client2:{'$gt':-1}})[client2] >= 5:
+            collection.update({client2: database()}, {'$set':{client2: database() - 5}})
+        else:
+            collection.update({client2: database()}, {'$set':{client2: 0}})
         client1=None
         client2=None
     if play1  == 'Scissors' and play2  == 'Rock':
@@ -245,6 +270,11 @@ def Button():
         play2=None
         usernum=0
         session["response"]==client2 + 'won'
+        collection.update({client2: database()}, {'$set':{client2: database() + 10}})
+        if collection.find_one({client1:{'$gt':-1}})[client1] >= 5:
+            collection.update({client1: database()}, {'$set':{client1: database() - 5}})
+        else:
+            collection.update({client1: database()}, {'$set':{client1: 0}})
         client1=None
         client2=None
     if play1  == 'Scissors' and play2  == 'Scissors':
@@ -254,6 +284,8 @@ def Button():
         play2=None
         usernum=0
         session["response"]='The game was a tie'
+        collection.update({client2: database()}, {'$set':{client2: database() + 2}})
+        collection.update({client1: database()}, {'$set':{client1: database() + 2}})
         client1=None
         client2=None
     if play1  =='Rock' and play2  == 'Rock':
@@ -263,6 +295,8 @@ def Button():
         play2=None
         usernum=0
         session["response"]='The game was a tie'
+        collection.update({client2: database()}, {'$set':{client2: database() + 2}})
+        collection.update({client1: database()}, {'$set':{client1: database() + 2}})
         client1=None
         client2=None
     if play1  == 'Paper' and play2  == 'Paper':
@@ -272,6 +306,8 @@ def Button():
         play2=None
         usernum=0
         session["response"]='The game was a tie'
+        collection.update({client2: database()}, {'$set':{client2: database() + 2}})
+        collection.update({client1: database()}, {'$set':{client1: database() + 2}})
         client1=None
         client2=None
     print(var)

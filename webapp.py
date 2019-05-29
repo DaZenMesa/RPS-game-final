@@ -33,6 +33,7 @@ var_lock = Lock()
 
 client1=None
 client2=None
+test = 'false'
 #===============================================================================
 
 app.debug = True #Change this to False for production
@@ -83,32 +84,6 @@ def database():
             print('x')
             return 0
 
-
-
-
-
-
-def background_thread():
-    count=0
-    while True:
-        socketio.sleep(5) #wait 5 seconds
-        count=count+1
-        socketio.emit('count_event', count) #sends out the varible count to all of the cleints
-
-#===============================================================================
-
-#this code littarly efects nothing feel free to delete but may need in future
-
-@socketio.on('connect')
-def test_connect():
-    global thread #this is a global varible which is the same across all cleints
-    print('here')
-    with thread_lock: #locks the global varible so only one client can use it at a time
-        if thread is None:
-            thread=socketio.start_background_task(target=background_thread)
-
-    emit('start', 'connected')# this is the message that goes along with start in the JQuery code
-
 #===============================================================================
 
 @app.context_processor
@@ -137,8 +112,8 @@ def StartGame(response=""):
         if "response" in session:
             temp= session["response"]
             session["response"]=' '
-            return render_template('StartGame.html', username = session['user_data']['login'], score = database(), sen = temp)
-        return render_template('StartGame.html', username = session['user_data']['login'], score = database(), sen = response)
+            return render_template('StartGame.html', username = session['user_data']['login'], score = database(), sen = temp, test = test)
+        return render_template('StartGame.html', username = session['user_data']['login'], score = database(), sen = response, test = test)
 
 #===============================================================================
 
@@ -159,7 +134,7 @@ def Button():
         print("scissors")
 
 
-    test = False 
+    test = 'false' 
 
 
     with var_lock:
@@ -178,7 +153,7 @@ def Button():
                     play1= request.form['Scissors']
                     print("scissors played")
                 var= True
-                test= True
+                test= 'true'
                 print(var)
         else:
             global play2
@@ -193,7 +168,7 @@ def Button():
                 if play2 is None and 'Scissors' in request.form:
                     play2= request.form['Scissors']
                     print("scissors played2")
-                    test = True
+                    test = 'true'
                     
     session["response"]=' '
     if play1 == 'Rock' and play2 == 'Paper':
@@ -210,7 +185,7 @@ def Button():
             collection.update({client1: database()}, {'$set':{client1: 0}})
         client1=None
         client2=None
-        test = False
+        test = 'false'
     if play1 == 'Paper' and play2 == 'Rock':
         print ('client 1 won')
         var=False
@@ -225,7 +200,7 @@ def Button():
             collection.update({client2: database()}, {'$set':{client2: 0}})
         client1=None
         client2=None
-        test = False
+        test = 'false'
     if play1 == 'Scissors' and play2 == 'Paper':
         print ('client 1 won')
         var=False
@@ -240,7 +215,7 @@ def Button():
             collection.update({client2: database()}, {'$set':{client2: 0}})
         client1=None
         client2=None
-        test = False
+        test = 'false'
     if play1  == 'Paper' and play2  == 'Scissors':
         print ('client 2 won')
         var=False
@@ -255,7 +230,7 @@ def Button():
             collection.update({client1: database()}, {'$set':{client1: 0}})
         client1=None
         client2=None
-        test = False
+        test = 'false'
     if play1  == 'Rock' and play2  == 'Scissors':
         print ('client 1 won')
         var=False
@@ -270,7 +245,7 @@ def Button():
             collection.update({client2: database()}, {'$set':{client2: 0}})
         client1=None
         client2=None
-        test = False
+        test = 'false'
     if play1  == 'Scissors' and play2  == 'Rock':
         print('client 2 won')
         var=False
@@ -285,7 +260,7 @@ def Button():
             collection.update({client1: database()}, {'$set':{client1: 0}})
         client1=None
         client2=None
-        test = False
+        test = 'false'
     if play1  == 'Scissors' and play2  == 'Scissors':
         print('tie')
         var=False
@@ -297,7 +272,7 @@ def Button():
         collection.update({client1: database()}, {'$set':{client1: database() + 2}})
         client1=None
         client2=None
-        test = False
+        test = 'false'
     if play1  =='Rock' and play2  == 'Rock':
         print('tie')
         var=False
@@ -309,7 +284,7 @@ def Button():
         collection.update({client1: database()}, {'$set':{client1: database() + 2}})
         client1=None
         client2=None
-        test = False
+        test = 'false'
     if play1  == 'Paper' and play2  == 'Paper':
         print('tie')
         var=False
@@ -321,7 +296,7 @@ def Button():
         collection.update({client1: database()}, {'$set':{client1: database() + 2}})
         client1=None
         client2=None
-        test = False
+        test = 'false'
     print(var)
     return redirect(url_for("StartGame"))
 

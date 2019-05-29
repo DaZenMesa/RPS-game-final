@@ -7,3 +7,4 @@ wheel
 gunicorn
 flask_socketio
 Flask-OAuthlib
+bson

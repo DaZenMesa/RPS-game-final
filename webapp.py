@@ -124,18 +124,7 @@ def Button():
     global var
     global test
 
-    if 'Rock' in request.form:
-        print("rock")
-        buttonpressed='True'
-    if 'Paper'in request.form:
-        print("paper")
-        buttonpressed='True'
-    if 'Scissors' in request.form:
-        print("scissors")
-
-
     test = 'false' 
-
 
     with var_lock:
 
@@ -145,34 +134,27 @@ def Button():
                 client1=session['user_data']['login']
                 if play1 is None and 'Rock' in request.form:
                     play1= request.form['Rock']
-                    print("rock played")
                 if play1 is None and 'Paper' in request.form:
-                    play1= request.form['Paper']
-                    print("paper played")
+                    play1= request.form['Paper']    
                 if play1 is None and 'Scissors' in request.form:
-                    play1= request.form['Scissors']
-                    print("scissors played")
+                    play1= request.form['Scissors']     
                 var= True
                 test= 'true'
-                print(var)
+               
         else:
             global play2
             with play2_lock:
                 client2=session['user_data']['login']
                 if play2 is None and 'Rock' in request.form:
                     play2= request.form['Rock']
-                    print("rock played2")
                 if play2 is None and 'Paper' in request.form:
                     play2= request.form['Paper']
-                    print("paper played2")
                 if play2 is None and 'Scissors' in request.form:
                     play2= request.form['Scissors']
-                    print("scissors played2")
                     test = 'true'
                     
     session["response"]=' '
     if play1 == 'Rock' and play2 == 'Paper':
-        print('client 2 won')
         var=False
         play1=None
         play2=None

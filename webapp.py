@@ -307,7 +307,7 @@ def Button():
 @app.route('/p2')
 def Info():
     if 'user_data' not in session:
-        return render_template('Info.html')
+        return render_template('info.html')
     else:
         x2 = 0
         x3 = 0
@@ -378,7 +378,7 @@ def Info():
 
 @app.route('/login')
 def login():
-    return github.authorize(callback=url_for('authorized', _external=True, _scheme='http')) #callback URL must match the pre-configured callback URL
+    return github.authorize(callback=url_for('authorized', _external=True, _scheme='https')) #callback URL must match the pre-configured callback URL
 
 #===============================================================================
 

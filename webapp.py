@@ -332,7 +332,7 @@ def Button():
 @app.route('/p2')
 def Info():
     if 'user_data' not in session:
-        return render_template('Info.html')
+        return render_template('info.html')
     else:
         x2 = 0
         x3 = 0

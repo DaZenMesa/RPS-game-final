@@ -34,6 +34,7 @@ var_lock = Lock()
 client1=None
 client2=None
 test = 'false'
+message = ""
 #===============================================================================
 
 app.debug = True #Change this to False for production
@@ -123,7 +124,8 @@ def Button():
     global client2
     global var
     global test
-
+    global message
+    
     test = 'false' 
 
     with var_lock:
@@ -153,13 +155,13 @@ def Button():
                     play2= request.form['Scissors']
                     test = 'true'
                     
-    session["response"]=' '
+    global message
     if play1 == 'Rock' and play2 == 'Paper':
         var=False
         play1=None
         play2=None
         usernum=0
-        session["response"]=client2 +' won'
+        message=client2 +' won'
         collection.update({client2: database()}, {'$set':{client2: database() + 10}})
         if collection.find_one({client1:{'$gt':-1}})[client1] >= 5:
             collection.update({client1: database()}, {'$set':{client1: database() - 5}})
@@ -173,7 +175,7 @@ def Button():
         play1=None
         play2=None
         usernum=0
-        session["response"]= client1 + ' won'
+        message= client1 + ' won'
         collection.update({client1: database()}, {'$set':{client1: database() + 10}})
         if collection.find_one({client2:{'$gt':-1}})[client2] >= 5:
             collection.update({client2: database()}, {'$set':{client2: database() - 5}})
@@ -187,7 +189,7 @@ def Button():
         play1=None
         play2=None
         usernum=0
-        session["response"]=client1 + ' won'
+        message=client1 + ' won'
         collection.update({client1: database()}, {'$set':{client1: database() + 10}})
         if collection.find_one({client2:{'$gt':-1}})[client2] >= 5:
             collection.update({client2: database()}, {'$set':{client2: database() - 5}})
@@ -201,7 +203,7 @@ def Button():
         play1=None
         play2=None
         usernum=0
-        session["response"]=client2 +  'won'
+        message=client2 +  'won'
         collection.update({client2: database()}, {'$set':{client2: database() + 10}})
         if collection.find_one({client1:{'$gt':-1}})[client1] >= 5:
             collection.update({client1: database()}, {'$set':{client1: database() - 5}})
@@ -215,7 +217,7 @@ def Button():
         play1=None
         play2=None
         usernum=0
-        session["response"]=client1 + 'won'
+        message=client1 + 'won'
         collection.update({client1: database()}, {'$set':{client1: database() + 10}})
         if collection.find_one({client2:{'$gt':-1}})[client2] >= 5:
             collection.update({client2: database()}, {'$set':{client2: database() - 5}})
@@ -229,7 +231,7 @@ def Button():
         play1=None
         play2=None
         usernum=0
-        session["response"]==client2 + 'won'
+       message=client2 + 'won'
         collection.update({client2: database()}, {'$set':{client2: database() + 10}})
         if collection.find_one({client1:{'$gt':-1}})[client1] >= 5:
             collection.update({client1: database()}, {'$set':{client1: database() - 5}})
@@ -243,7 +245,7 @@ def Button():
         play1=None
         play2=None
         usernum=0
-        session["response"]='The game was a tie'
+        message='The game was a tie'
         collection.update({client2: database()}, {'$set':{client2: database() + 2}})
         collection.update({client1: database()}, {'$set':{client1: database() + 2}})
         client1=None
@@ -254,7 +256,7 @@ def Button():
         play1=None
         play2=None
         usernum=0
-        session["response"]='The game was a tie'
+        message='The game was a tie'
         collection.update({client2: database()}, {'$set':{client2: database() + 2}})
         collection.update({client1: database()}, {'$set':{client1: database() + 2}})
         client1=None
@@ -265,7 +267,7 @@ def Button():
         play1=None
         play2=None
         usernum=0
-        session["response"]='The game was a tie'
+        message='The game was a tie'
         collection.update({client2: database()}, {'$set':{client2: database() + 2}})
         collection.update({client1: database()}, {'$set':{client1: database() + 2}})
         client1=None

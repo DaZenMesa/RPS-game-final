@@ -279,6 +279,7 @@ def Info():
     if 'user_data' not in session:
         return render_template('info.html')
     else:
+        print('hi')
         x2 = 0
         x3 = 0
         x4 = 0
@@ -341,7 +342,7 @@ def Info():
                             x5 = y
                             i4 = z
                 x2 = 1
-        return render_template('Info.html', username1 = i2, username2 = i3, username3 = i4, score1 = x3, score2 = x4, score3 = x5)
+        return render_template('info.html', username1 = i2, username2 = i3, username3 = i4, score1 = x3, score2 = x4, score3 = x5)
 
 
 #===============================================================================

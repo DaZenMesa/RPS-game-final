@@ -231,7 +231,7 @@ def Button():
         play1=None
         play2=None
         usernum=0
-       message=client2 + 'won'
+        message=client2 + 'won'
         collection.update({client2: database()}, {'$set':{client2: database() + 10}})
         if collection.find_one({client1:{'$gt':-1}})[client1] >= 5:
             collection.update({client1: database()}, {'$set':{client1: database() - 5}})

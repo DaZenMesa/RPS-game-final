@@ -110,10 +110,6 @@ def StartGame(response=""):
     else:
         #if not collection.find_one({session['user_data']['login']:{'$gt':-1}}) == None:
             #collection.update({session['user_data']['login']: database()}, {'$set':{session['user_data']['login']: database() + 1}})
-        if "response" in session:
-            temp= session["response"]
-            session["response"]=' '
-            return render_template('StartGame.html', username = session['user_data']['login'], score = database(), sen = temp, test = test)
         return render_template('StartGame.html', username = session['user_data']['login'], score = database(), sen = message, test = test)
 
 #===============================================================================

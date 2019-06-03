@@ -114,7 +114,7 @@ def StartGame(response=""):
             temp= session["response"]
             session["response"]=' '
             return render_template('StartGame.html', username = session['user_data']['login'], score = database(), sen = temp, test = test)
-        return render_template('StartGame.html', username = session['user_data']['login'], score = database(), sen = response, test = test)
+        return render_template('StartGame.html', username = session['user_data']['login'], score = database(), sen = message, test = test)
 
 #===============================================================================
 
